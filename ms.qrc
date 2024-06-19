@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/group1">
+        <file>images/flag.ico</file>
+        <file>images/mine.ico</file>
+        <file>images/mine2.ico</file>
+        <file>images/mine3.ico</file>
+        <file>images/mine4.ico</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>field.ui</file>
+    </qresource>
+</RCC>
