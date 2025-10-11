@@ -1,5 +1,5 @@
 #include <QWidget>
-#include<QTimer>
+#include <QTimer>
 #include <QRandomGenerator>
 #include <QMessageBox>
 
