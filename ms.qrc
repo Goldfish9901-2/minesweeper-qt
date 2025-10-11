@@ -6,7 +6,4 @@
         <file>images/mine3.ico</file>
         <file>images/mine4.ico</file>
     </qresource>
-    <qresource prefix="/">
-        <file>field.ui</file>
-    </qresource>
 </RCC>

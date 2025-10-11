@@ -34,6 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         grid.h grid.cpp
         static.h
         ms.qrc
+        field.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET MineSweeper APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -55,6 +56,9 @@ else()
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+endif()
+if(WIN32)
+    target_sources(MineSweeper PRIVATE appicon.rc)
 endif()
 
 target_link_libraries(MineSweeper PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)

@@ -14,7 +14,8 @@ Field::Field(int rows, int cols, int mines, std::string mode, QWidget* parent)
     ://basic setup
      QWidget{parent}, ui(new Ui_Field),
      //initializing variables
-     rows(rows), cols(cols), mines(mines), grids(QList<Grid*>()),
+     rows(rows), cols(cols), mines(mines),
+    grids(QList<Grid*>()),
      started(false), mode(QString::fromStdString(mode)),
      random(new QRandomGenerator()),
      timer(new QTimer(this)), secs(0)
@@ -26,7 +27,6 @@ Field::Field(int rows, int cols, int mines, std::string mode, QWidget* parent)
     setWindowTitle(this->mode);
     this->ui->gridLayout->setRowMinimumHeight(rows, rows);
 
-    grids = QList<Grid*>();
     for(int i = 0; i < rows; i++)
     {
         for(int j = 0; j < cols; j++)

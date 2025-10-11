@@ -37,9 +37,9 @@ private:
     Ui_Field* ui;
     int rows, cols, mines,secs;
     bool started;
-    class QList<Grid*> grids;
-    class QRandomGenerator* random;
-    class QTimer* timer;
+    QList<Grid*> grids;
+    QRandomGenerator* random;
+    QTimer* timer;
     QString mode;
 };
 

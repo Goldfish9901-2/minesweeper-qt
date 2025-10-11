@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     // instance = nullptr;
-    for (auto field : fields)
+    for (auto& field : fields)
     {
         delete field;
     }
