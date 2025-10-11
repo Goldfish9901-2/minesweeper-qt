@@ -12,12 +12,12 @@ Field::Field(QWidget* parent)
 
 Field::Field(int rows, int cols, int mines, std::string mode, QWidget* parent)
     ://basic setup
-    QWidget{parent}, ui(new Ui_Field),
-    //initializing variables
-    rows(rows), cols(cols), mines(mines), grids(QList<Grid*>()),
-    started(false),mode(QString::fromStdString(mode)),
-    random(new QRandomGenerator()),
-    timer(new QTimer(this)),secs(0)
+     QWidget{parent}, ui(new Ui_Field),
+     //initializing variables
+     rows(rows), cols(cols), mines(mines), grids(QList<Grid*>()),
+     started(false), mode(QString::fromStdString(mode)),
+     random(new QRandomGenerator()),
+     timer(new QTimer(this)), secs(0)
 {
     ui->setupUi(this);
 
@@ -41,38 +41,22 @@ Field::Field(int rows, int cols, int mines, std::string mode, QWidget* parent)
         {
             Grid* temp = grids.at(r * cols + c);
             connect(temp, &Grid::check, this, &Field::check);
-            if(r > 0)
+            for(int ri = r - 1; ri <= r + 1; ri++)
             {
-                temp->addNeighbor(grids.at((r - 1) * cols + c));
-                if(c > 0)
+                for(int ci = c - 1; ci <= c + 1; ci++)
                 {
-                    temp->addNeighbor(grids.at((r - 1) * cols + c - 1));
-                }
-                if(c < cols - 1)
-                {
-                    temp->addNeighbor(grids.at((r - 1) * cols + c + 1));
-                }
-            }
-            if(r < rows - 1)
-            {
-                temp->addNeighbor(grids.at((r + 1) * cols + c));
-                if(c > 0)
-                {
-                    temp->addNeighbor(grids.at((r + 1) * cols + c - 1));
-                }
-                if(c < cols - 1)
-                {
-                    temp->addNeighbor(grids.at((r + 1) * cols + c + 1));
+                    if(ri < 0 || ri >= rows)
+                        continue;
+                    if(ci < 0 || ci >= cols)
+                        continue;
+                    if(ri == r && ci == c)
+                        continue;
+                    Grid *neighbor = this->grids.at(ri * cols + ci);
+                    temp->addNeighbor(neighbor);
+
                 }
             }
-            if(c > 0)
-            {
-                temp->addNeighbor(grids.at(r * cols + c - 1));
-            }
-            if(c < cols - 1)
-            {
-                temp->addNeighbor(grids.at(r * cols + c + 1));
-            }
+
         }
     }
     for(int r = 0; r < rows; r++)
@@ -80,14 +64,14 @@ Field::Field(int rows, int cols, int mines, std::string mode, QWidget* parent)
         {
             this->ui->gridLayout->addWidget(
                 grids.at(r * cols + c), r, c
-                );
+            );
         }
 }
 
 Field::~Field()
 {
     delete random;
-    for(auto grid : grids)
+    for(auto& grid : grids)
     {
         delete grid;
     }
@@ -125,13 +109,13 @@ void Field::generateMines(Grid* start)
             temp->countSurroundings();
             temp->update();
         }
-    connect(timer,&QTimer::timeout,this,&Field::updateTime);
+    connect(timer, &QTimer::timeout, this, &Field::updateTime);
     timer->start(1000);
 }
 void Field::check()
 {
     bool allOpened = true;
-    for(Grid* grid : this->grids)
+    for(Grid*& grid : this->grids)
     {
         if(grid->getMine())
         {
@@ -139,7 +123,7 @@ void Field::check()
             {
                 timer->stop();
                 delete timer;
-                for(Grid* t : this->grids)
+                for(Grid*& t : this->grids)
                 {
                     t->reveal();
                 }
@@ -157,7 +141,7 @@ void Field::check()
     {
         timer->stop();
         delete timer;
-        for(Grid* t : this->grids)
+        for(Grid*& t : this->grids)
         {
             t->reveal(true);
         }
