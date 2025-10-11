@@ -1,0 +1,30 @@
+{
+	"BUILD_DIR" : "/home/goldfish/ext/other-device-backup/MineSweeper/build/Desktop_Qt_6_8_2-Debug/MineSweeper_autogen",
+	"CMAKE_BINARY_DIR" : "/home/goldfish/ext/other-device-backup/MineSweeper/build/Desktop_Qt_6_8_2-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/goldfish/ext/other-device-backup/MineSweeper/build/Desktop_Qt_6_8_2-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/goldfish/ext/other-device-backup/MineSweeper",
+	"CMAKE_SOURCE_DIR" : "/home/goldfish/ext/other-device-backup/MineSweeper",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "Ninja",
+	"INCLUDE_DIR" : "/home/goldfish/ext/other-device-backup/MineSweeper/build/Desktop_Qt_6_8_2-Debug/MineSweeper_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/goldfish/ext/other-device-backup/MineSweeper/field.ui",
+		"/home/goldfish/ext/other-device-backup/MineSweeper/images/mine4.ico",
+		"/home/goldfish/ext/other-device-backup/MineSweeper/images/mine3.ico",
+		"/home/goldfish/ext/other-device-backup/MineSweeper/images/mine.ico",
+		"/home/goldfish/ext/other-device-backup/MineSweeper/images/flag.ico",
+		"/home/goldfish/ext/other-device-backup/MineSweeper/images/mine2.ico"
+	],
+	"LOCK_FILE" : "/home/goldfish/ext/other-device-backup/MineSweeper/build/Desktop_Qt_6_8_2-Debug/CMakeFiles/MineSweeper_autogen.dir/AutoRcc_ms_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "ms" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_ms.cpp",
+	"RCC_EXECUTABLE" : "/home/goldfish/Qt/6.8.2/gcc_64/libexec/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/goldfish/ext/other-device-backup/MineSweeper/build/Desktop_Qt_6_8_2-Debug/CMakeFiles/MineSweeper_autogen.dir/AutoRcc_ms_EWIEGA46WW_Used.txt",
+	"SOURCE" : "/home/goldfish/ext/other-device-backup/MineSweeper/ms.qrc",
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}
