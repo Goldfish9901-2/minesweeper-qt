@@ -76,3 +76,4 @@ CMakeLists.txt.user*
 cmake-build-debug
 tmp
 build
+/qt_docs/
