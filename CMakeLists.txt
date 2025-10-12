@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 
 project(MineSweeper VERSION 0.1 LANGUAGES CXX)
 
@@ -8,6 +8,7 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
 
 
@@ -23,6 +24,11 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        field.h field.cpp
+        grid.h grid.cpp
+        static.h
+        ms.qrc
+        field.ui
         ${TS_FILES}
 )
 
@@ -30,11 +36,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MineSweeper
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        field.h field.cpp
-        grid.h grid.cpp
-        static.h
-        ms.qrc
-        field.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET MineSweeper APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

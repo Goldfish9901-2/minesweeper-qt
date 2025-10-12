@@ -3,7 +3,7 @@
 
 #include "mainwindow.h"
 #include <QIcon>
-
+#include <string>
 extern MainWindow* mw;
 
 Field* container(Grid* grid);
