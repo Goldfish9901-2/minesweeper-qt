@@ -19,7 +19,7 @@ public:
     explicit Field(QWidget* parent = nullptr);
     Field(int rows, int cols, int mines,
           std::string mode = "custom", QWidget* parent = nullptr);
-    ~Field();
+    ~Field() override;
 
     void generateMines(Grid* start);
     bool isStarted();

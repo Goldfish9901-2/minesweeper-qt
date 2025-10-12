@@ -2,6 +2,8 @@
 #include "./ui_mainwindow.h"
 
 #include <QFile>
+#include <QScreen>
+#include <QGuiApplication>
 
 QIcon *flagIcon,*mineIcon,*mineTriggeredIcon,*appIcon;
 std::string resourcePrefix;
@@ -12,6 +14,14 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // 设置窗口自适应屏幕大小
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    int screenWidth = screenGeometry.width();
+    int screenHeight = screenGeometry.height();
+    this->resize(screenWidth * 0.8, screenHeight * 0.8);
+    this->move((screenWidth - this->width()) / 2, (screenHeight - this->height()) / 2);
 
     resourcePrefix = ":/group1/images/";
 

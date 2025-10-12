@@ -2,6 +2,8 @@
 #include <QRandomGenerator>
 #include <QString>
 #include <QMessageBox>
+#include <QScreen>
+#include <QGuiApplication>
 
 
 
@@ -21,6 +23,14 @@ Field::Field(int rows, int cols, int mines, std::string mode, QWidget* parent)
      timer(new QTimer(this)), secs(0)
 {
     ui->setupUi(this);
+
+    // 设置窗口自适应屏幕大小
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    int screenWidth = screenGeometry.width();
+    int screenHeight = screenGeometry.height();
+    this->resize(screenWidth * 0.8, screenHeight * 0.8);
+    this->move((screenWidth - this->width()) / 2, (screenHeight - this->height()) / 2);
 
     mw->fields.append(this);
     ui->lMode->setText(this->mode);

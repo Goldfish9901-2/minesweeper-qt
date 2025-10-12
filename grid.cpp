@@ -40,8 +40,15 @@ Grid::Grid(int row, int col, QWidget* parent)
           ,mine(false),opened(false),flagged(false),
           surroundingMines(0)
 {
-    setFixedSize(0x20,0x20);
-    setFont(QFont("Arial", 20));
+    // 根据父窗口大小动态设置格子大小
+    if (parent) {
+        int gridSize = qMin(parent->width(), parent->height()) / qMax(((Field*)parent)->cols, ((Field*)parent)->rows);
+        gridSize = qBound(20, gridSize, 40); // 限制在20-40像素之间
+        setFixedSize(gridSize, gridSize);
+    } else {
+        setFixedSize(32, 32);
+    }
+    setFont(QFont("Arial", 20, QFont::Bold));
 
     update();
     show();
