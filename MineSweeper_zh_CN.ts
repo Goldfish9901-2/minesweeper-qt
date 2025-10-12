@@ -40,5 +40,40 @@
       <translation>退出</translation>
     </message>
   </context>
+  <context>
+    <name>Field</name>
+    <message>
+      <source>MineSweeper</source>
+      <translation>扫雷</translation>
+    </message>
+    <message>
+      <source>Time Left(s):</source>
+      <translation>剩余时间(秒):</translation>
+    </message>
+    <message>
+      <source>0 s</source>
+      <translation>0 秒</translation>
+    </message>
+    <message>
+      <source>Flagged Grids:</source>
+      <translation>已标记格子:</translation>
+    </message>
+    <message>
+      <source>0</source>
+      <translation>0</translation>
+    </message>
+    <message>
+      <source>Mode:</source>
+      <translation>模式:</translation>
+    </message>
+    <message>
+      <source>custom</source>
+      <translation>自定义</translation>
+    </message>
+    <message>
+      <source>Mines:</source>
+      <translation>地雷数:</translation>
+    </message>
+  </context>
 </TS>
 
