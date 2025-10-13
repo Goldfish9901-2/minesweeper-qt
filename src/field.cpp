@@ -213,7 +213,7 @@ void Field::onOpenRequest(Grid* grid)
                     continue;
                 visited.insert(neighbor);
                 if (openResult == Grid::GridOpenResult::SURROUNDING_UNFLAGGED_AVAILABLE
-                    && (neighbor->getFlagged()||neighbor->getOpened()))
+                    && (neighbor->getFlagged() || neighbor->getOpened()))
                     continue;
                 // if (neighbor->getSurroundingMines())
                 //     continue;
