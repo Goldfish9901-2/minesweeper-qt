@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg width="161" height="161" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <!-- 圆角矩形旗帜 -->
+    <rect x="10" y="10" width="140" height="140" rx="15" ry="15"
+          fill="#ccc" stroke="#000" stroke-width="0"/>
+</svg>

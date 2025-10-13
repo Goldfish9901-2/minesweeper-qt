@@ -1,0 +1,8 @@
+//
+// Created by jerry on 2025/10/13.
+//
+
+#ifndef MINESWEEPER_BASE_INTERFACE_H
+#define MINESWEEPER_BASE_INTERFACE_H
+
+#endif //MINESWEEPER_BASE_INTERFACE_H

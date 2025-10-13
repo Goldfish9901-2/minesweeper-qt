@@ -1,9 +1,20 @@
 <RCC>
     <qresource prefix="/group1">
-        <file>images/flag.ico</file>
-        <file>images/mine.ico</file>
-        <file>images/mine2.ico</file>
-        <file>images/mine3.ico</file>
-        <file>images/mine4.ico</file>
+        <file>res/numbers/1mines.svg</file>
+        <file>res/numbers/2mines.svg</file>
+        <file>res/numbers/3mines.svg</file>
+        <file>res/numbers/4mines.svg</file>
+        <file>res/numbers/5mines.svg</file>
+        <file>res/numbers/6mines.svg</file>
+        <file>res/numbers/7mines.svg</file>
+        <file>res/numbers/8mines.svg</file>
+        <file>res/images/exploded.svg</file>
+        <file>res/images/flag.svg</file>
+        <file>res/images/incorrect.svg</file>
+        <file>res/images/maybe.svg</file>
+        <file>res/images/mine.svg</file>
+        <file>res/images/blank.svg</file>
+        <file>res/images/no_around.svg</file>
+        <file>res/images/mine.ico</file>
     </qresource>
 </RCC>
