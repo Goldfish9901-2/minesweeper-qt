@@ -18,21 +18,23 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(TS_FILES res/MineSweeper_zh_CN.ts)
+set(CMAKE_AUTOUIC_SEARCH_PATHS
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 set(PROJECT_SOURCES
         src/main.cpp
         src/mainwindow.cpp
-        src/mainwindow.h
-        src/mainwindow.ui
-        src/field.h src/field.cpp
-        src/grid.h src/grid.cpp
-        src/static.h
-        src/base_interface.h
+        include/mainwindow.h
+        include/mainwindow.ui
+        include/field.h src/field.cpp
+        include/grid.h src/grid.cpp
+        include/static.h
+        include/base_interface.h
         ms.qrc
-        src/field.ui
+        include/field.ui
         ${TS_FILES}
 )
-
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MineSweeper
             MANUAL_FINALIZATION
@@ -72,6 +74,7 @@ endif ()
 if (WIN32)
     target_sources(MineSweeper PRIVATE res/appicon.rc)
 endif ()
+target_include_directories(MineSweeper PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(MineSweeper
     PRIVATE

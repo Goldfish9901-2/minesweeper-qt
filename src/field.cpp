@@ -1,5 +1,3 @@
-#include "field.h"
-
 #include "mainwindow.h"
 #include "static.h"
 #include <QRandomGenerator>
@@ -13,17 +11,30 @@
 #include <queue>
 
 
-Field::Field(QWidget* parent)
-    : Field{10, 10, 10, GameMode::EASY, parent}
+
+void Field::renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const
 {
+    QSize buttonSize = button->size();
+    if (buttonSize.width() <= 0 || buttonSize.height() <= 0) {
+        buttonSize = QSize(32, 32); // Default size
+    }
+    
+    renderIcon(state, surroundingMines, button, buttonSize);
 }
 
+void Field::renderIcon(Grid::State state, int surroundingMines, QPushButton* button, const QSize& size) const
+{
+    // Use the global MainWindow instance for rendering
+    if (mw) {
+        mw->renderIcon(state, surroundingMines, button, size);
+    }
+}
 
 Field::Field(
     const unsigned short rows,
     const unsigned short cols,
     const unsigned short mines,
-    const GameMode& mode,
+    const GameMode mode,
     QWidget* parent)
     : //basic setup
     QWidget{parent}, ui(new Ui_Field),
@@ -35,6 +46,82 @@ Field::Field(
     timer(new QTimer(this)), mode((mode))
 {
     ui->setupUi(this);
+
+
+    // 设置窗口自适应屏幕大小
+    const QScreen* screen = QGuiApplication::primaryScreen();
+    const QRect screenGeometry = screen->geometry();
+    const int screenWidth = screenGeometry.width();
+    const int screenHeight = screenGeometry.height();
+    this->resize(
+        static_cast<int>(screenWidth * 0.8),
+        static_cast<int>(screenHeight * 0.8));
+    this->move((screenWidth - this->width()) / 2, (screenHeight - this->height()) / 2);
+
+    mw->fields.push_back(this);
+    const auto modeString = MainWindow::difficultyToStringStandard(this->mode);
+    ui->lMode->setText(modeString);
+    setWindowTitle(modeString);
+    this->ui->gridLayout->setRowMinimumHeight(rows, rows);
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            grids.push_back(new Grid(i, j, this));
+        }
+    }
+
+    for (int r = 0; r < rows; r++)
+    {
+        for (int c = 0; c < cols; c++)
+        {
+            Grid* temp = grids.at(r * cols + c);
+            connect(temp, &Grid::check, this, &Field::check);
+            for (int ri = r - 1; ri <= r + 1; ri++)
+            {
+                for (int ci = c - 1; ci <= c + 1; ci++)
+                {
+                    if (ri < 0 || ri >= rows)
+                        continue;
+                    if (ci < 0 || ci >= cols)
+                        continue;
+                    if (ri == r && ci == c)
+                        continue;
+                    Grid* neighbor = this->grids.at(flatLoc(ri, ci));
+                    temp->addNeighbor(neighbor);
+                }
+            }
+        }
+    }
+    for (int r = 0; r < rows; r++)
+        for (int c = 0; c < cols; c++)
+        {
+            this->ui->gridLayout->addWidget(
+                grids.at(r * cols + c), r, c
+            );
+        }
+}
+
+
+Field::Field(
+    const unsigned short rows,
+    const unsigned short cols,
+    const unsigned short mines,
+    const GameMode mode,
+    Field* parentField)
+    : //basic setup
+    QWidget{parentField}, ui(new Ui_Field),
+    //initializing variables
+    rows(rows), cols(cols), mines(mines),
+    secs(0),
+    started(false),
+    grids(std::vector<Grid*>()), finishedGrids(std::set<Grid*>()),
+    timer(new QTimer(this)), mode((mode))
+
+{
+    ui->setupUi(this);
+
 
     // 设置窗口自适应屏幕大小
     const QScreen* screen = QGuiApplication::primaryScreen();
@@ -94,6 +181,8 @@ Field::Field(
 
 Field::~Field()
 {
+    // No need to manually clean up QSvgRenderer objects as they are now value types
+    
     // delete random;
     for (const auto& grid : grids)
     {
@@ -222,7 +311,7 @@ void Field::onOpenRequest(Grid* grid)
                 // if (neighbor->getSurroundingMines())
                 //     continue;
                 toVisit.push(neighbor);
-                displayField();
+                // displayField();
             }
             visited.insert(current);
         case Grid::GridOpenResult::SINGLE:
@@ -235,7 +324,7 @@ void Field::onOpenRequest(Grid* grid)
         default: break;
         }
         current->updateDisplay();
-        displayField();
+        // displayField();
     }
 }
 
@@ -369,5 +458,21 @@ void Field::displayField() const
             grid->isMine() ? -1 : grid->getSurroundingMines()
         );
         row += buf;
+    }
+}
+
+QString Field::gameModeToString(GameMode mode)
+{
+    switch (mode) {
+    case GameMode::EASY:
+        return QString("Easy");
+    case GameMode::MEDIUM:
+        return QString("Medium");
+    case GameMode::HARD:
+        return QString("Hard");
+    case GameMode::CUSTOM:
+        return QString("Custom");
+    default:
+        return QString("Custom");
     }
 }

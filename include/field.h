@@ -1,5 +1,6 @@
 #include <QWidget>
 #include <QTimer>
+#include <QSvgRenderer>
 
 
 #ifndef FIELD_H
@@ -35,11 +36,16 @@ public:
     Q_OBJECT
 
 public:
-    explicit Field(QWidget* parent = nullptr);
+    explicit Field(QWidget* parent = nullptr):Field(10,10,10){}
     Field(unsigned short rows,
           unsigned short cols,
           unsigned short mines,
-          const GameMode& mode = GameMode::CUSTOM, QWidget* parent = nullptr);
+          GameMode mode = GameMode::CUSTOM, QWidget* parent = nullptr);
+    Field(unsigned short rows,
+          unsigned short cols,
+          unsigned short mines,
+          GameMode mode,
+          Field* parentField);
     ~Field() override;
 
     void generateMines(Grid* start);
@@ -49,26 +55,47 @@ public:
 
     void updateFlags() const;
     StartOpenResult openGrid(Grid* start);
+    
+    // Public interface for rendering icons through MainWindow
+    void renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const;
+    void renderIcon(Grid::State state, int surroundingMines, QPushButton* button, const QSize& size) const;
 
 private slots:
     void check(Grid* grid);
     void updateTime();
 
 private:
-    friend class Grid;
+    // friend class Grid;
     Ui_Field* ui;
-    unsigned short rows, cols, mines;int secs;
+    unsigned short rows, cols, mines;
+
+public:
+    [[nodiscard]] unsigned short getRows() const
+    {
+        return rows;
+    }
+
+    [[nodiscard]] unsigned short getCols() const
+    {
+        return cols;
+    }
+
+private:
+    int secs;
     bool started;
     std::vector<Grid*> grids;
     std::set<Grid*> finishedGrids;
     QTimer* timer;
     GameMode mode;
-
+    
     void onOpenRequest(Grid* grid);
     void registerOpened(Grid* grid);
     void displayField() const;
 
     [[nodiscard]] int flatLoc(int r,int c) const;
+    
+    // 将GameMode枚举转换为QString
+    static QString gameModeToString(GameMode mode);
 };
 
 

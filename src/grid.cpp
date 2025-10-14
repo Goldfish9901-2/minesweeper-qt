@@ -1,5 +1,7 @@
 #include "static.h"
 #include <QMessageBox>
+#include <QResizeEvent>
+#include <QPainter>
 
 //initializers
 //1. default constructor
@@ -45,13 +47,19 @@ Grid::Grid(const int row, const int col, QWidget* parent)
     : QPushButton{parent}
       , row(row), col(col)
       , surroundingMines(0), mine(false), opened(false)
-      , neighbors(std::vector<Grid*>())
       , flagged(false)
+      , neighbors(std::vector<Grid*>())
+      , currentState(updateState(false))
 {
     // 根据父窗口大小动态设置格子大小
     if (parent)
     {
-        int gridSize = qMin(parent->width(), parent->height()) / qMax(((Field*)parent)->cols, ((Field*)parent)->rows);
+        int gridSize =
+            qMin(parent->width(), parent->height())
+            / qMax(
+                dynamic_cast<Field*>(parent)->getCols(),
+                dynamic_cast<Field*>(parent)->getRows()
+            );
         gridSize = qBound(20, gridSize, 40); // 限制在20-40像素之间
         setFixedSize(gridSize, gridSize);
     }
@@ -65,7 +73,7 @@ Grid::Grid(const int row, const int col, QWidget* parent)
     show();
 }
 
-bool Grid::isNeighbor(Grid* grid) const
+bool Grid::isNeighbor(const Grid* grid) const
 {
     return std::find(neighbors.begin(), neighbors.end(), grid) != neighbors.end();
 }
@@ -169,7 +177,6 @@ void Grid::mousePressEvent(QMouseEvent* event)
             }
             break;
         case StartOpenResult::SUCCESS:
-            break;
         default:
             // 操作成功，无需显示消息
             break;
@@ -251,25 +258,35 @@ Grid::State Grid::updateState(const bool reveal)
     return currentState = State::OPENED;
 }
 
+// SVG rendering functions
+void Grid::renderIcon()
+{
+    renderIcon(size());
+}
 
+void Grid::renderIcon(const QSize& size)
+{
+    if (mw)
+    {
+        mw->renderIcon(currentState, surroundingMines, this, size);
+    }
+}
+
+void Grid::resizeEvent(QResizeEvent* event)
+{
+    QPushButton::resizeEvent(event);
+    renderIcon(); // Refresh the icon when the button is resized
+}
+
+void Grid::updateDisplay()
+{
+    updateDisplay(false);
+}
 
 void Grid::updateDisplay(const bool reveal)
 {
-    switch (updateState(reveal))
-    {
-    case State::OPENED:
-        setIcon(surroundingMines == 0 ? mw->noAroundIcon : mw->surroundingMineIcons[surroundingMines - 1]);
-        break;
-    case State::FLAGGED:
-        setIcon(mw->flagIcon);
-        break;
-    case State::TRIGGERED:
-        setIcon(mw->mineIcon);
-        break;
-    case State::UNOPENED:
-        setIcon(mw->blankIcon);
-        break;
-    }
+    updateState(reveal);
+    renderIcon();
 }
 
 void Grid::reveal()
