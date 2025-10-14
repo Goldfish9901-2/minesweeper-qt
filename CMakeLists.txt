@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Svg SvgWidgets)
@@ -17,23 +17,39 @@ set(QT_VERSION_MAJOR 6)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-set(TS_FILES res/MineSweeper_zh_CN.ts)
+set(TS_FILES 
+    res/MineSweeper_zh_CN.ts
+    res/MineSweeper_en.ts
+)
 set(CMAKE_AUTOUIC_SEARCH_PATHS
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 set(PROJECT_SOURCES
         src/main.cpp
+
         src/mainwindow.cpp
         include/mainwindow.h
         include/mainwindow.ui
-        include/field.h src/field.cpp
-        include/grid.h src/grid.cpp
+
+        include/field.ui
+        include/field.h
+        src/field.cpp
+
+        include/grid.h
+        src/grid.cpp
+
         include/static.h
         include/base_interface.h
         ms.qrc
-        include/field.ui
+
         ${TS_FILES}
+        src/locale.cpp
+        src/render_utils.cpp
+        src/icon_tests.cpp
+
+        include/LanguageChoiceAction.h
+        src/LanguageChoiceAction.cpp
 )
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MineSweeper
@@ -47,7 +63,7 @@ if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
     # qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
     qt_add_translations(MineSweeper
-            TS_FILES res/MineSweeper_zh_CN.ts
+            TS_FILES res/MineSweeper_zh_CN.ts res/MineSweeper_en.ts
             RESOURCE_PREFIX /i18n
     )
     
@@ -74,6 +90,10 @@ endif ()
 if (WIN32)
     target_sources(MineSweeper PRIVATE res/appicon.rc)
 endif ()
+if(MSVC)
+    add_compile_options("/utf-8")
+endif()
+
 target_include_directories(MineSweeper PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(MineSweeper

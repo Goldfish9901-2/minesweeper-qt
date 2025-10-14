@@ -19,5 +19,6 @@
     </qresource>
     <qresource prefix="/i18n">
         <file>res/i18n/MineSweeper_zh_CN.qm</file>
+        <!-- <file>res/i18n/MineSweeper_en.qm</file> -->
     </qresource>
 </RCC>

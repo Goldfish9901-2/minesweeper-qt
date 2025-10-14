@@ -154,6 +154,14 @@
     <context>
         <name>MainWindow</name>
         <message>
+            <source>Language</source>
+            <translation>语言</translation>
+        </message>
+        <message>
+            <source>invalid language</source>
+            <translation>无效的语言</translation>
+        </message>
+        <message>
             <location filename="../src/mainwindow.ui" line="14"/>
             <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="149"/>
             <location filename="../src/ui_mainwindow.h" line="149"/>

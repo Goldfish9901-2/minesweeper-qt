@@ -6,7 +6,11 @@
 
 #include <QMainWindow>
 #include <QSvgRenderer>
+#include <QLocale>
+#include <QTranslator>
 #include <functional>
+#include <QAction>
+#include <set>
 
 QT_BEGIN_NAMESPACE
 
@@ -26,12 +30,13 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
     const std::string resourcePrefix, mineNumberPrefix;
+    // 存储实际支持的语言列表（基于成功加载的翻译文件）
+    static std::set<QString> supportedLocales;
+    bool tryRegisterTranslation(const QString& langID) const;
 
     // Public interface for rendering icons
     void renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const;
     void renderIcon(Grid::State state, int surroundingMines, QPushButton* button, const QSize& size) const;
-    // void renderIcon(const QString& iconName, QPushButton* button) const;
-    // void renderIcon(const QString& iconName, QPushButton* button, const QSize& size) const;
 
     [[nodiscard]] int getOffset() const;
     static void easy();
@@ -54,6 +59,12 @@ private:
     const std::unique_ptr<QSvgRenderer> mineTriggeredIconRenderer;
     const std::vector<std::unique_ptr<QSvgRenderer>> surroundingMineIconRenderers; // 1-8数字图标渲染器
 
+    // 语言翻译器
+    QTranslator* translator;
+
+    // 动态创建语言菜单项
+    void createLanguageMenu();
+
     void testIcons();
     void loadTestIcon(const QString& iconName, int r, int c);
 
@@ -67,6 +78,11 @@ private:
     void setMineIcon(QPushButton* button) const;
     void setMineTriggeredIcon(QPushButton* button) const;
     void setSurroundingMineIcon(int number, QPushButton* button) const;
+
+private slots:
+    
+    // 动态语言切换槽函数
+    void onLanguageActionTriggered(const QString& language) ;
 };
 
 #endif // MAINWINDOW_H

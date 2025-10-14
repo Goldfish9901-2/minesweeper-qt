@@ -6,38 +6,16 @@
 #include <QGuiApplication>
 #include <QSvgRenderer>
 #include <QPainter>
-#include <QSizePolicy>
+#include <QTranslator>
+#include <QApplication>
+#include <QLocale>
+#include <QAction>
 
 #include "grid.h"
+#include "LanguageChoiceAction.h"
 using Difficulty = Field::GameMode;
-QString joinRendererPath(const std::string& resourcePrefix, const std::string& fileName)
-{
-    QString path = QString::fromStdString(resourcePrefix + fileName);
-    if (!QFile::exists(path))
-    {
-        qDebug() << "Icon not found: " << path;
-        return QString::fromStdString(resourcePrefix + "maybe.svg");
-    }
-    return path;
-    // return QFile::exists(path) ? path : QString::fromStdString(resourcePrefix + "maybe.svg");
-}
-// Lambda 初始化函数
-std::unique_ptr<QSvgRenderer> loadRenderer(const std::string& resourcePrefix, const std::string& fileName)
-{
-    return std::make_unique<QSvgRenderer>(joinRendererPath(resourcePrefix, fileName));
-}
-
-std::vector<std::unique_ptr<QSvgRenderer>> loadNumberRenderers(const std::string& mineNumberPrefix)
-{
-    std::vector<std::unique_ptr<QSvgRenderer>> renderers;
-    renderers.reserve(8);
-    for (int i = 1; i <= 8; ++i)
-    {
-        renderers.push_back(loadRenderer(mineNumberPrefix, QString("%1mines.svg").arg(i).toStdString()));
-    }
-    return renderers;
-}
-
+std::unique_ptr<QSvgRenderer> loadRenderer(const std::string& resourcePrefix, const std::string& fileName);
+std::vector<std::unique_ptr<QSvgRenderer>> loadNumberRenderers(const std::string& mineNumberPrefix);
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -51,6 +29,7 @@ MainWindow::MainWindow(QWidget* parent)
       , mineTriggeredIconRenderer(loadRenderer(resourcePrefix, "exploded.svg"))
 
       , surroundingMineIconRenderers(loadNumberRenderers(mineNumberPrefix))
+      , translator(new QTranslator(this))
 {
     offset = static_cast<int>(surroundingMineIconRenderers.size());
     ui->setupUi(this);
@@ -70,6 +49,30 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->bHard, &QPushButton::clicked, this, &MainWindow::hard);
     connect(ui->bCustom, &QPushButton::clicked, this, &MainWindow::custom);
     connect(ui->bMedium, &QPushButton::clicked, this, &MainWindow::medium);
+
+    // 初始化语言支持
+    const QStringList uiLanguages = QLocale::system().uiLanguages();
+
+    // 遍历系统语言，尝试加载对应的翻译文件
+    for (const QString& locale : uiLanguages)
+    {
+        qWarning() << "found " << locale;
+        const QString localeName = QLocale(locale).name();
+
+        // 尝试加载该语言的翻译文件
+        if (tryRegisterTranslation(localeName))
+        {
+            qDebug() << "Successfully loaded translation for" << localeName;
+        }
+        else
+        {
+            qWarning() << locale << " failed";
+        }
+    }
+
+
+    // 创建语言菜单
+    createLanguageMenu();
 }
 
 MainWindow::~MainWindow()
@@ -125,7 +128,7 @@ QString MainWindow::difficultyToStringStandard(Difficulty difficulty)
     }
 }
 
-void MainWindow::createGame(Difficulty difficulty)
+void MainWindow::createGame(const Difficulty difficulty)
 {
     Field* field = nullptr;
     switch (difficulty)
@@ -147,49 +150,30 @@ void MainWindow::createGame(Difficulty difficulty)
     field->show();
 }
 
-void MainWindow::testIcons()
+
+
+// 动态创建语言菜单项
+void MainWindow::createLanguageMenu()
 {
-    int r = 0, c = 0;
-    for (int i = 0; i < 8; ++i)
+    const std::set<QString>& locales = supportedLocales;
+    // 获取语言菜单
+    QMenu* languageMenu = this->ui->menuLanguage;
+    if (!languageMenu)
     {
-        QPushButton* btn = new QPushButton(this);
-        btn->setFixedSize(40, 40);
-        renderIcon(Grid::State::OPENED, i + 1, btn);
-        ui->iconDemoLayout->addWidget(btn, r, c++);
+
+        return;
     }
-    r = 1, c = 0;
-    QPushButton* btn1 = new QPushButton(this);
-    btn1->setFixedSize(40, 40);
-    renderIcon(Grid::State::TRIGGERED, 0, btn1);
-    ui->iconDemoLayout->addWidget(btn1, r, c++);
-
-    QPushButton* btn2 = new QPushButton(this);
-    btn2->setFixedSize(40, 40);
-    renderIcon(Grid::State::FLAGGED, 0, btn2);
-    ui->iconDemoLayout->addWidget(btn2, r, c++);
-
-    QPushButton* btn3 = new QPushButton(this);
-    btn3->setFixedSize(40, 40);
-    renderIcon(Grid::State::UNOPENED, 0, btn3);
-    ui->iconDemoLayout->addWidget(btn3, r, c++);
-
-    QPushButton* btn4 = new QPushButton(this);
-    btn4->setFixedSize(40, 40);
-    renderIcon(Grid::State::OPENED, 0, btn4);
-    ui->iconDemoLayout->addWidget(btn4, r, c++);
+    // 清除现有动作（如果有的话）
+    languageMenu->clear();
+    // 为每种支持的语言创建菜单项
+    for (const QString& locale : locales)
+    {
+        auto* action = new LanguageChoiceAction(locale, languageMenu);
+        languageMenu->addAction(action);
+        // 连接信号槽
+        connect(action, &LanguageChoiceAction::onChosen, this, &MainWindow::onLanguageActionTriggered);
+    }
 }
-
-void MainWindow::loadTestIcon(const QString& iconName, int r, int c)
-{
-    // This method is no longer used with the new approach, but kept for compatibility
-    qDebug() << QString("loading to location [ %1, %2 ]").arg(r).arg(c);
-    QPushButton* btn = new QPushButton(this);
-    btn->setFixedSize(40, 40);
-    // We'll use the old method here for backward compatibility
-    renderIcon(Grid::State::UNOPENED, 0, btn);
-    ui->iconDemoLayout->addWidget(btn, r, c);
-}
-
 
 // Individual renderer methods
 void MainWindow::setBlankIcon(QPushButton* button) const
@@ -323,7 +307,7 @@ void MainWindow::renderIcon(Grid::State state, const int surroundingMines, QPush
     switch (state)
     {
     case Grid::State::OPENED:
-        qDebug()<<QString("rendering icon for surrounding: %1").arg(surroundingMines);
+        qDebug() << QString("rendering icon for surrounding: %1").arg(surroundingMines);
         if (surroundingMines == 0)
         {
             renderer = noAroundIconRenderer.get();
