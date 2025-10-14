@@ -1,34 +1,15 @@
 #include "mainwindow.h"
 #include "static.h"
-#include <QRandomGenerator>
 #include <QString>
 #include <QMessageBox>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QObject>
 #include <random>
 #include <chrono>
 #include <iostream>
 #include <queue>
 
-
-
-void Field::renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const
-{
-    QSize buttonSize = button->size();
-    if (buttonSize.width() <= 0 || buttonSize.height() <= 0) {
-        buttonSize = QSize(32, 32); // Default size
-    }
-    
-    renderIcon(state, surroundingMines, button, buttonSize);
-}
-
-void Field::renderIcon(Grid::State state, int surroundingMines, QPushButton* button, const QSize& size) const
-{
-    // Use the global MainWindow instance for rendering
-    if (mw) {
-        mw->renderIcon(state, surroundingMines, button, size);
-    }
-}
 
 Field::Field(
     const unsigned short rows,
@@ -43,7 +24,7 @@ Field::Field(
     secs(0),
     started(false),
     grids(std::vector<Grid*>()), finishedGrids(std::set<Grid*>()),
-    timer(new QTimer(this)), mode((mode))
+    timer(new QTimer(this)), mode(mode)
 {
     ui->setupUi(this);
 
@@ -442,7 +423,7 @@ void Field::registerOpened(Grid* grid)
 
 void Field::displayField() const
 {
-    std::string row = "";
+    std::string row;
     char buf[20];
     for (const auto& grid : grids)
     {
@@ -458,21 +439,5 @@ void Field::displayField() const
             grid->isMine() ? -1 : grid->getSurroundingMines()
         );
         row += buf;
-    }
-}
-
-QString Field::gameModeToString(GameMode mode)
-{
-    switch (mode) {
-    case GameMode::EASY:
-        return QString("Easy");
-    case GameMode::MEDIUM:
-        return QString("Medium");
-    case GameMode::HARD:
-        return QString("Hard");
-    case GameMode::CUSTOM:
-        return QString("Custom");
-    default:
-        return QString("Custom");
     }
 }

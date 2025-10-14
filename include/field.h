@@ -1,11 +1,10 @@
-#include <QWidget>
-#include <QTimer>
-#include <QSvgRenderer>
+
 
 
 #ifndef FIELD_H
 #define FIELD_H
-
+#include <QWidget>
+#include <QTimer>
 #include <set>
 
 #include "grid.h"
@@ -33,10 +32,14 @@ public:
         HARD,
         CUSTOM
     };
+
     Q_OBJECT
 
 public:
-    explicit Field(QWidget* parent = nullptr):Field(10,10,10){}
+    explicit Field(QWidget* parent = nullptr) : Field(10, 10, 10)
+    {
+    }
+
     Field(unsigned short rows,
           unsigned short cols,
           unsigned short mines,
@@ -55,10 +58,8 @@ public:
 
     void updateFlags() const;
     StartOpenResult openGrid(Grid* start);
-    
+
     // Public interface for rendering icons through MainWindow
-    void renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const;
-    void renderIcon(Grid::State state, int surroundingMines, QPushButton* button, const QSize& size) const;
 
 private slots:
     void check(Grid* grid);
@@ -87,15 +88,12 @@ private:
     std::set<Grid*> finishedGrids;
     QTimer* timer;
     GameMode mode;
-    
+
     void onOpenRequest(Grid* grid);
     void registerOpened(Grid* grid);
     void displayField() const;
 
-    [[nodiscard]] int flatLoc(int r,int c) const;
-    
-    // 将GameMode枚举转换为QString
-    static QString gameModeToString(GameMode mode);
+    [[nodiscard]] int flatLoc(int r, int c) const;
 };
 
 

@@ -114,14 +114,14 @@ QString MainWindow::difficultyToStringStandard(Difficulty difficulty)
     switch (difficulty)
     {
     case Difficulty::EASY:
-        return tr("easy");
+        return tr("EASY");
     case Difficulty::MEDIUM:
-        return tr("medium");
+        return tr("MEDIUM");
     case Difficulty::HARD:
-        return tr("hard");
+        return tr("HARD");
     case Difficulty::CUSTOM:
     default:
-        return tr("custom");
+        return tr("CUSTOM");
     }
 }
 
