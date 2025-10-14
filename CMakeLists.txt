@@ -48,6 +48,11 @@ if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             TS_FILES res/MineSweeper_zh_CN.ts
             RESOURCE_PREFIX /i18n
     )
+    
+#    # 添加生成的.qm文件到资源文件
+#    set_source_files_properties(ms.qrc PROPERTIES QT_RESOURCE_ALIAS_PATH "/i18n")
+#    set_source_files_properties(${qmFiles} PROPERTIES
+#        QT_RESOURCE_ALIAS_PATH "/i18n")
 
 else ()
     if (ANDROID)

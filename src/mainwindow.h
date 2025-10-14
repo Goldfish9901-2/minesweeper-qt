@@ -15,6 +15,8 @@ namespace Ui
 
 QT_END_NAMESPACE
 
+
+
 class MainWindow final : public QMainWindow
 {
     Q_OBJECT
@@ -40,6 +42,8 @@ public:
     static void medium();
     static void hard();
     static void custom();
+    // 将Difficulty枚举转换为std::string
+    static QString difficultyToStringStandard(Field::GameMode difficulty);
 
 private:
     static QIcon loadSvg(const QString& path);
@@ -47,7 +51,11 @@ private:
     int offset;
     void testIcons();
     void loadIcon(QIcon icon, int r, int c);
-};
+
+    // 根据难度创建游戏
+    static void createGame(Field::GameMode difficulty);
+
+    };
 
 
 #endif // MAINWINDOW_H

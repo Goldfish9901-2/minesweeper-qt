@@ -116,17 +116,17 @@ std::vector<Grid*> Grid::getNeighbors() const
 }
 
 // getters of private members showing the state of the grid
-bool Grid::getMine() const
+bool Grid::isMine() const
 {
     return mine;
 }
 
-bool Grid::getOpened() const
+bool Grid::isOpened() const
 {
     return opened;
 }
 
-bool Grid::getFlagged() const
+bool Grid::isFlagged() const
 {
     return flagged;
 }
@@ -151,21 +151,21 @@ void Grid::mousePressEvent(QMouseEvent* event)
         switch (result)
         {
         case StartOpenResult::GAME_ALREADY_ENDED:
-            QMessageBox::information(f, "游戏已结束", "游戏已经结束");
+            QMessageBox::information(f, tr("Game Over"), tr("Game already ended"));
             break;
         case StartOpenResult::FLAGGED_GRID:
-            QMessageBox::information(f, "无法打开", "不能打开已标记的格子");
+            QMessageBox::information(f, tr("Unable to open"), tr("Cannot open flagged grid"));
             break;
         case StartOpenResult::NOT_ENOUGH_FLAGS:
             {
-                const QString message = QString("还需要 %1 个旗子").arg(surroundingMines - countFlag());
-                QMessageBox::information(f, "旗子不足", message);
+                const QString message = tr("Need %1 more flags").arg(surroundingMines - countFlag());
+                QMessageBox::information(f, tr("Not enough flags"), message);
             }
             break;
         case StartOpenResult::TOO_MANY_FLAGS:
             {
-                const QString message = QString("多了 %1 个旗子").arg(countFlag() - surroundingMines);
-                QMessageBox::information(f, "旗子过多", message);
+                const QString message = tr("Too many flags by %1").arg(countFlag() - surroundingMines);
+                QMessageBox::information(f, tr("Too many flags"), message);
             }
             break;
         case StartOpenResult::SUCCESS:
@@ -198,9 +198,13 @@ Grid::GridOpenResult Grid::open()
         }
         return GridOpenResult::INVALID;
     }
+    // neither flag protection nor opened short-circuit can prevent opening now
 
     this->opened = true;
     updateDisplay();
+    if (this->mine)
+        return GridOpenResult::GAME_ENDED;
+
     if (surroundingMines != 0)
     {
         return GridOpenResult::SINGLE;
@@ -221,7 +225,7 @@ int Grid::getColumn() const
 //3
 void Grid::flag()
 {
-    if (this->getOpened())
+    if (this->isOpened())
     {
         return;
     }
@@ -236,7 +240,7 @@ Grid::State Grid::updateState(const bool reveal)
     {
         return currentState = State::FLAGGED;
     }
-    if (!getOpened() && !reveal)
+    if (!isOpened() && !reveal)
     {
         return currentState = State::UNOPENED;
     }
@@ -248,11 +252,6 @@ Grid::State Grid::updateState(const bool reveal)
 }
 
 
-// functions for foreground
-void Grid::updateDisplay()
-{
-    updateDisplay(false);
-}
 
 void Grid::updateDisplay(const bool reveal)
 {

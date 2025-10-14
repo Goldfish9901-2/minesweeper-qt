@@ -17,4 +17,7 @@
         <file>res/images/no_around.svg</file>
         <file>res/images/mine.ico</file>
     </qresource>
+    <qresource prefix="/i18n">
+        <file>res/i18n/MineSweeper_zh_CN.qm</file>
+    </qresource>
 </RCC>

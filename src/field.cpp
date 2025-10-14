@@ -1,3 +1,5 @@
+#include "field.h"
+
 #include "mainwindow.h"
 #include "static.h"
 #include <QRandomGenerator>
@@ -12,7 +14,7 @@
 
 
 Field::Field(QWidget* parent)
-    : Field{10, 10, 10, "easy", parent}
+    : Field{10, 10, 10, GameMode::EASY, parent}
 {
 }
 
@@ -21,7 +23,7 @@ Field::Field(
     const unsigned short rows,
     const unsigned short cols,
     const unsigned short mines,
-    const std::string& mode,
+    const GameMode& mode,
     QWidget* parent)
     : //basic setup
     QWidget{parent}, ui(new Ui_Field),
@@ -30,7 +32,7 @@ Field::Field(
     secs(0),
     started(false),
     grids(std::vector<Grid*>()), finishedGrids(std::set<Grid*>()),
-    timer(new QTimer(this)), mode(QString::fromStdString(mode))
+    timer(new QTimer(this)), mode((mode))
 {
     ui->setupUi(this);
 
@@ -45,8 +47,9 @@ Field::Field(
     this->move((screenWidth - this->width()) / 2, (screenHeight - this->height()) / 2);
 
     mw->fields.push_back(this);
-    ui->lMode->setText(this->mode);
-    setWindowTitle(this->mode);
+    const auto modeString = MainWindow::difficultyToStringStandard(this->mode);
+    ui->lMode->setText(modeString);
+    setWindowTitle(modeString);
     this->ui->gridLayout->setRowMinimumHeight(rows, rows);
 
     for (int i = 0; i < rows; i++)
@@ -87,6 +90,7 @@ Field::Field(
             );
         }
 }
+
 
 Field::~Field()
 {
@@ -147,7 +151,7 @@ bool Field::lose(const Grid* grid)
     if (!started)
         return false;
     // 如果是雷，游戏结束
-    if (!grid->getMine())
+    if (!grid->isMine())
         return false;
 
     timer->stop();
@@ -157,7 +161,7 @@ bool Field::lose(const Grid* grid)
         t->reveal();
     }
     if (started)
-        QMessageBox::information(this, "Game Over", "You Lost");
+        QMessageBox::information(this, tr("Game Over"), tr("You Lost"));
     // delete this;
     return true;
 }
@@ -183,13 +187,13 @@ void Field::check(Grid* grid)
         {
             t->reveal();
         }
-        QMessageBox::information(this, "Game Over", "You Won");
+        QMessageBox::information(this, tr("Game Over"), tr("You Won"));
         // delete this;
     }
 }
 
 
-// 新增方法：统一处理邻居格子的打开
+
 void Field::onOpenRequest(Grid* grid)
 {
     // 使用队列进行广度优先遍历，避免递归
@@ -213,18 +217,19 @@ void Field::onOpenRequest(Grid* grid)
                     continue;
                 visited.insert(neighbor);
                 if (openResult == Grid::GridOpenResult::SURROUNDING_UNFLAGGED_AVAILABLE
-                    && (neighbor->getFlagged() || neighbor->getOpened()))
+                    && (neighbor->isFlagged() || neighbor->isOpened()))
                     continue;
                 // if (neighbor->getSurroundingMines())
                 //     continue;
                 toVisit.push(neighbor);
                 displayField();
             }
+            visited.insert(current);
         case Grid::GridOpenResult::SINGLE:
             registerOpened(current);
             break;
         case Grid::GridOpenResult::GAME_ENDED:
-            check(grid);
+            lose(current);
             break;
 
         default: break;
@@ -269,7 +274,7 @@ void Field::updateFlags() const
     int flags = 0;
     for (const Grid* grid : grids)
     {
-        if (grid->getFlagged())
+        if (grid->isFlagged())
         {
             flags++;
         }
@@ -282,7 +287,12 @@ void Field::updateTime()
     secs++;
     ui->lTime->setText(QString::number(secs));
 }
-
+/**
+ * @brief Field::openGrid
+ * a method to automatically open surrounding available grids
+ * @param start the grid to start the automation
+ * @return the automation status <br/> note that this value does not necessarily mean the success of the game
+ */
 StartOpenResult Field::openGrid(Grid* start)
 {
     // 检查游戏是否已开始
@@ -296,7 +306,7 @@ StartOpenResult Field::openGrid(Grid* start)
     }
 
     // 如果点击的是已标记的格子，则不允许打开
-    if (start->getFlagged())
+    if (start->isFlagged())
     {
         return StartOpenResult::FLAGGED_GRID;
     }
@@ -307,7 +317,6 @@ StartOpenResult Field::openGrid(Grid* start)
         generateMines(start);
         // 单击打开格子
         onOpenRequest(start);
-        emit start->check(start);
         started = true;
         return StartOpenResult::SUCCESS;
     }
@@ -316,7 +325,7 @@ StartOpenResult Field::openGrid(Grid* start)
     const int flagCount = start->countFlag();
     const int surroundingMines = start->getSurroundingMines();
 
-    if (start->getOpened())
+    if (start->isOpened())
     {
         if (flagCount < surroundingMines)
         {
@@ -330,7 +339,6 @@ StartOpenResult Field::openGrid(Grid* start)
     }
 
     onOpenRequest(start);
-    emit start->check(start);
     return StartOpenResult::SUCCESS;
 }
 
@@ -340,6 +348,7 @@ void Field::registerOpened(Grid* grid)
     qDebug() <<
         QString(" %1 grids finished")
         .arg(finishedGrids.size());
+    check(grid);
 }
 
 void Field::displayField() const
@@ -357,7 +366,7 @@ void Field::displayField() const
             buf, sizeof(buf) - 1,
             "%3d [%3d] ",
             static_cast<int>(grid->updateState(false)),
-            grid->getMine() ? -1 : grid->getSurroundingMines()
+            grid->isMine() ? -1 : grid->getSurroundingMines()
         );
         row += buf;
     }

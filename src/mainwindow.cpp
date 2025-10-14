@@ -9,6 +9,7 @@
 #include <QSizePolicy>
 
 #include "grid.h"
+using Difficulty = Field::GameMode;
 
 QIcon MainWindow::loadSvg(const QString& path)
 {
@@ -84,7 +85,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     setWindowIcon(mineIcon);
 
-    testIcons();
+    // testIcons();
 
     connect(ui->bEasy, &QPushButton::clicked, this, &MainWindow::easy);
     connect(ui->bHard, &QPushButton::clicked, this, &MainWindow::hard);
@@ -111,28 +112,59 @@ int MainWindow::getOffset() const
 
 void MainWindow::easy()
 {
-    auto* field = new Field(10, 10, 10, "easy");
-    field->show();
+    createGame(Difficulty::EASY);
 }
 
 void MainWindow::medium()
 {
-    auto* field = new Field(16, 16, 40, "medium");
-    // fields.append(field);
-    field->show();
+    createGame(Difficulty::MEDIUM);
 }
 
 void MainWindow::hard()
 {
-    auto* field = new Field(16, 30, 99, "hard");
-    // fields.append(field);
-    field->show();
+    createGame(Difficulty::HARD);
 }
 
 void MainWindow::custom()
 {
-    auto* field = new Field(10, 10, 10, "custom");
-    // fields.append(field);
+    createGame(Difficulty::CUSTOM);
+}
+
+
+QString MainWindow::difficultyToStringStandard(Difficulty difficulty)
+{
+    switch (difficulty)
+    {
+    case Difficulty::EASY:
+        return tr("easy");
+    case Difficulty::MEDIUM:
+        return tr("medium");
+    case Difficulty::HARD:
+        return tr("hard");
+    case Difficulty::CUSTOM:
+    default:
+        return tr("custom");
+    }
+}
+
+void MainWindow::createGame(Difficulty difficulty)
+{
+    Field* field = nullptr;
+    switch (difficulty) {
+    case Difficulty::EASY:
+        field = new Field(10, 10, 10, Field::GameMode::EASY);
+        break;
+    case Difficulty::MEDIUM:
+        field = new Field(16, 16, 40, Field::GameMode::MEDIUM);
+        break;
+    case Difficulty::HARD:
+        field = new Field(16, 30, 99, Field::GameMode::HARD);
+        break;
+    case Difficulty::CUSTOM:
+    default:
+        field = new Field(10, 10, 10, Field::GameMode::CUSTOM);
+        break;
+    }
     field->show();
 }
 

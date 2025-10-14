@@ -1,5 +1,4 @@
-
-
+#include <QMessageBox>
 
 #ifndef GRID_H
 #define GRID_H
@@ -52,8 +51,7 @@ public:
     Grid& operator=(const Grid& grid);
     bool addNeighbor(Grid* grid);
     [[nodiscard]] bool setMine();
-    void updateDisplay();
-    void updateDisplay(bool reveal);
+    void updateDisplay(bool reveal=false);
     bool isNeighbor(Grid* grid) const;
     void countSurroundings();
     [[nodiscard]] int countFlag() const;
@@ -61,9 +59,9 @@ public:
     [[nodiscard]] GridOpenResult open(); // 将open方法移到public部分
     [[nodiscard]] int getRow() const;
     [[nodiscard]] int getColumn() const;
-    [[nodiscard]] bool getMine() const;
-    [[nodiscard]] bool getOpened() const;
-    [[nodiscard]] bool getFlagged() const;
+    [[nodiscard]] bool isMine() const;
+    [[nodiscard]] bool isOpened() const;
+    [[nodiscard]] bool isFlagged() const;
     [[nodiscard]] std::vector<Grid*> getNeighbors() const;
     void reveal();
     State updateState(bool reveal);

@@ -24,6 +24,14 @@ enum class StartOpenResult
 
 class Field final : public QWidget
 {
+public:
+    enum class GameMode
+    {
+        EASY,
+        MEDIUM,
+        HARD,
+        CUSTOM
+    };
     Q_OBJECT
 
 public:
@@ -31,7 +39,7 @@ public:
     Field(unsigned short rows,
           unsigned short cols,
           unsigned short mines,
-          const std::string& mode = "custom", QWidget* parent = nullptr);
+          const GameMode& mode = GameMode::CUSTOM, QWidget* parent = nullptr);
     ~Field() override;
 
     void generateMines(Grid* start);
@@ -54,7 +62,7 @@ private:
     std::vector<Grid*> grids;
     std::set<Grid*> finishedGrids;
     QTimer* timer;
-    QString mode;
+    GameMode mode;
 
     void onOpenRequest(Grid* grid);
     void registerOpened(Grid* grid);
