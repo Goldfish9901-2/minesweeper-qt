@@ -13,6 +13,12 @@ if __name__ == "__main__":
         print("uic executable not found. Please install it and try again.", file=sys.stderr)
         sys.exit(1)
 
+    # 查找 lupdate 可执行文件
+    lupdate_executable = shutil.which("lupdate")
+    if lupdate_executable is None:
+        print("lupdate executable not found. Please install it and try again.", file=sys.stderr)
+        sys.exit(1)
+
     # 遍历所有 .ui 文件
     for ui_file in dir_path.rglob("*.ui"):
         # 输出文件名，例如 mainwindow.ui -> ui_mainwindow.h
@@ -23,3 +29,16 @@ if __name__ == "__main__":
         result = subprocess.run([uic_executable, str(ui_file), "-o", str(output_file)])
         if result.returncode != 0:
             print(f"Failed to generate {output_file}", file=sys.stderr)
+
+    # 调用 lupdate 更新翻译文件
+    ts_files = list(dir_path.rglob("*.ts"))
+    if ts_files:
+        print(f"Updating {len(ts_files)} translation files...")
+        lupdate_cmd = [lupdate_executable, str(dir_path), "-ts"] + [str(ts_file) for ts_file in ts_files]
+        result = subprocess.run(lupdate_cmd)
+        if result.returncode != 0:
+            print("Failed to update translation files", file=sys.stderr)
+        else:
+            print("Translation files updated successfully")
+    else:
+        print("No .ts files found")

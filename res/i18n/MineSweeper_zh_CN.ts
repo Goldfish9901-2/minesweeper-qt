@@ -1,244 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
-    <context>
-        <name>Field</name>
-        <message>
-            <location filename="../src/field.ui" line="14"/>
-            <location filename="../src/field.ui" line="26"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="163"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="164"/>
-            <location filename="../src/ui_field.h" line="163"/>
-            <location filename="../src/ui_field.h" line="164"/>
-            <source>MineSweeper</source>
-            <translation>扫雷</translation>
-        </message>
-        <message>
-            <location filename="../src/field.ui" line="51"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="165"/>
-            <location filename="../src/ui_field.h" line="165"/>
-            <source>Time Left(s):</source>
-            <translation>剩余时间(秒):</translation>
-        </message>
-        <message>
-            <location filename="../src/field.ui" line="63"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="166"/>
-            <location filename="../src/ui_field.h" line="166"/>
-            <source>0 s</source>
-            <translation>0 秒</translation>
-        </message>
-        <message>
-            <location filename="../src/field.ui" line="81"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="167"/>
-            <location filename="../src/ui_field.h" line="167"/>
-            <source>Flagged Grids:</source>
-            <translation>已标记格子:</translation>
-        </message>
-        <message>
-            <location filename="../src/field.ui" line="93"/>
-            <location filename="../src/field.ui" line="145"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="168"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="172"/>
-            <location filename="../src/ui_field.h" line="168"/>
-            <location filename="../src/ui_field.h" line="172"/>
-            <source>0</source>
-            <translation>0</translation>
-        </message>
-        <message>
-            <location filename="../src/field.ui" line="109"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="169"/>
-            <location filename="../src/ui_field.h" line="169"/>
-            <source>Mode:</source>
-            <translation>模式:</translation>
-        </message>
-        <message>
-            <location filename="../src/field.ui" line="121"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="170"/>
-            <location filename="../src/ui_field.h" line="170"/>
-            <source>custom</source>
-            <translation>自定义</translation>
-        </message>
-        <message>
-            <location filename="../src/field.ui" line="133"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_field.h" line="171"/>
-            <location filename="../src/ui_field.h" line="171"/>
-            <source>Mines:</source>
-            <translation>地雷数:</translation>
-        </message>
-        <message>
-            <location filename="../src/field.cpp" line="164"/>
-            <location filename="../src/field.cpp" line="190"/>
-            <source>Game Over</source>
-            <translation>游戏结束</translation>
-        </message>
-        <message>
-            <location filename="../src/field.cpp" line="164"/>
-            <source>You Lost</source>
-            <translation>你输了</translation>
-        </message>
-        <message>
-            <location filename="../src/field.cpp" line="190"/>
-            <source>You Won</source>
-            <translation>你赢了</translation>
-        </message>
-        <message>
-            <location filename="../src/field.cpp" line="447"/>
-            <source>Easy</source>
-            <translation>简单</translation>
-        </message>
-        <message>
-            <location filename="../src/field.cpp" line="449"/>
-            <source>Medium</source>
-            <translation>中等</translation>
-        </message>
-        <message>
-            <location filename="../src/field.cpp" line="451"/>
-            <source>Hard</source>
-            <translation>困难</translation>
-        </message>
-        <message>
-            <location filename="../src/field.cpp" line="453"/>
-            <location filename="../src/field.cpp" line="455"/>
-            <source>Custom</source>
-            <translation>自定义</translation>
-        </message>
-    </context>
-    <context>
-        <name>Grid</name>
-        <message>
-            <location filename="../src/grid.cpp" line="148"/>
-            <source>open result</source>
-            <translation>打开结果</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="154"/>
-            <source>Game Over</source>
-            <translation>游戏结束</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="154"/>
-            <source>Game already ended</source>
-            <translation>游戏已结束</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="157"/>
-            <source>Unable to open</source>
-            <translation>无法打开</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="157"/>
-            <source>Cannot open flagged grid</source>
-            <translation>无法打开已标记的格子</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="161"/>
-            <source>Need %1 more flags</source>
-            <translation>还需要 %1 个旗子</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="162"/>
-            <source>Not enough flags</source>
-            <translation>旗子不足</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="167"/>
-            <source>Too many flags by %1</source>
-            <translation>多了 %1 个旗子</translation>
-        </message>
-        <message>
-            <location filename="../src/grid.cpp" line="168"/>
-            <source>Too many flags</source>
-            <translation>旗子过多</translation>
-        </message>
-    </context>
-    <context>
-        <name>MainWindow</name>
-        <message>
-            <source>Language</source>
-            <translation>语言</translation>
-        </message>
-        <message>
-            <source>invalid language</source>
-            <translation>无效的语言</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="14"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="149"/>
-            <location filename="../src/ui_mainwindow.h" line="149"/>
-            <source>MineSweeper</source>
-            <translation>扫雷</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="42"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="150"/>
-            <location filename="../src/ui_mainwindow.h" line="150"/>
-            <source>MINESWEEPER</source>
-            <translation>扫雷</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="61"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="151"/>
-            <location filename="../src/ui_mainwindow.h" line="151"/>
-            <source>EASY</source>
-            <translation>简单</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="73"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="152"/>
-            <location filename="../src/ui_mainwindow.h" line="152"/>
-            <source>MEDIUM</source>
-            <translation>中等</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="89"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="153"/>
-            <location filename="../src/ui_mainwindow.h" line="153"/>
-            <source>HARD</source>
-            <translation>困难</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="101"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="154"/>
-            <location filename="../src/ui_mainwindow.h" line="154"/>
-            <source>CUSTOM</source>
-            <translation>自定义</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="125"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="155"/>
-            <location filename="../src/ui_mainwindow.h" line="155"/>
-            <source>Game</source>
-            <translation>游戏</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="130"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="156"/>
-            <location filename="../src/ui_mainwindow.h" line="156"/>
-            <source>Record</source>
-            <translation>记录</translation>
-        </message>
-        <message>
-            <location filename="../src/mainwindow.ui" line="135"/>
-            <location filename="../build/MineSweeper_autogen/include/ui_mainwindow.h" line="157"/>
-            <location filename="../src/ui_mainwindow.h" line="157"/>
-            <source>Exit</source>
-            <translation>退出</translation>
-        </message>
-        <message>
-            <source>Easy</source>
-            <translation>简单</translation>
-        </message>
-        <message>
-            <source>Medium</source>
-            <translation>中等</translation>
-        </message>
-        <message>
-            <source>Hard</source>
-            <translation>困难</translation>
-        </message>
-        <message>
-            <source>Custom</source>
-            <translation>自定义</translation>
-        </message>
-    </context>
+<context>
+    <name>Field</name>
+    <message>
+        <location filename="../../include/field.ui" line="14"/>
+        <location filename="../../include/field.ui" line="26"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="163"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="164"/>
+        <location filename="../../include/ui_field.h" line="163"/>
+        <location filename="../../include/ui_field.h" line="164"/>
+        <source>MineSweeper</source>
+        <translation>扫雷</translation>
+    </message>
+    <message>
+        <location filename="../../include/field.ui" line="51"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="165"/>
+        <location filename="../../include/ui_field.h" line="165"/>
+        <source>Time Left(s):</source>
+        <translation>剩余时间(秒):</translation>
+    </message>
+    <message>
+        <location filename="../../include/field.ui" line="63"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="166"/>
+        <location filename="../../include/ui_field.h" line="166"/>
+        <source>0 s</source>
+        <translation>0 秒</translation>
+    </message>
+    <message>
+        <location filename="../../include/field.ui" line="81"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="167"/>
+        <location filename="../../include/ui_field.h" line="167"/>
+        <source>Flagged Grids:</source>
+        <translation>已标记格子:</translation>
+    </message>
+    <message>
+        <location filename="../../include/field.ui" line="93"/>
+        <location filename="../../include/field.ui" line="145"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="168"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="172"/>
+        <location filename="../../include/ui_field.h" line="168"/>
+        <location filename="../../include/ui_field.h" line="172"/>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <location filename="../../include/field.ui" line="109"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="169"/>
+        <location filename="../../include/ui_field.h" line="169"/>
+        <source>Mode:</source>
+        <translation>模式:</translation>
+    </message>
+    <message>
+        <location filename="../../include/field.ui" line="121"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="170"/>
+        <location filename="../../include/ui_field.h" line="170"/>
+        <source>custom</source>
+        <translation>自定义</translation>
+    </message>
+    <message>
+        <location filename="../../include/field.ui" line="133"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_field.h" line="171"/>
+        <location filename="../../include/ui_field.h" line="171"/>
+        <source>Mines:</source>
+        <translation>地雷数:</translation>
+    </message>
+    <message>
+        <location filename="../../src/field.cpp" line="156"/>
+        <location filename="../../src/field.cpp" line="174"/>
+        <source>Game Over</source>
+        <translation>游戏结束</translation>
+    </message>
+    <message>
+        <location filename="../../src/field.cpp" line="156"/>
+        <source>You Lost</source>
+        <translation>你输了</translation>
+    </message>
+    <message>
+        <location filename="../../src/field.cpp" line="174"/>
+        <source>You Won</source>
+        <translation>你赢了</translation>
+    </message>
+    <message>
+        <source>Easy</source>
+        <translation type="vanished">简单</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="vanished">中等</translation>
+    </message>
+    <message>
+        <source>Hard</source>
+        <translation type="vanished">困难</translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation type="vanished">自定义</translation>
+    </message>
+</context>
+<context>
+    <name>Grid</name>
+    <message>
+        <location filename="../../src/grid.cpp" line="156"/>
+        <source>open result</source>
+        <translation>打开结果</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="162"/>
+        <source>Game Over</source>
+        <translation>游戏结束</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="162"/>
+        <source>Game already ended</source>
+        <translation>游戏已结束</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="165"/>
+        <source>Unable to open</source>
+        <translation>无法打开</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="165"/>
+        <source>Cannot open flagged grid</source>
+        <translation>无法打开已标记的格子</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="169"/>
+        <source>Need %1 more flags</source>
+        <translation>还需要 %1 个旗子</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="170"/>
+        <source>Not enough flags</source>
+        <translation>旗子不足</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="175"/>
+        <source>Too many flags by %1</source>
+        <translation>多了 %1 个旗子</translation>
+    </message>
+    <message>
+        <location filename="../../src/grid.cpp" line="176"/>
+        <source>Too many flags</source>
+        <translation>旗子过多</translation>
+    </message>
+</context>
+<context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="130"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="179"/>
+        <location filename="../../include/ui_mainwindow.h" line="179"/>
+        <source>Language</source>
+        <translation>语言</translation>
+    </message>
+    <message>
+        <location filename="../../src/locale.cpp" line="61"/>
+        <source>invalid language</source>
+        <translation>无效的语言</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="14"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="167"/>
+        <location filename="../../include/ui_mainwindow.h" line="167"/>
+        <source>MineSweeper</source>
+        <translation>扫雷</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="42"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="173"/>
+        <location filename="../../include/ui_mainwindow.h" line="173"/>
+        <source>MINESWEEPER</source>
+        <translation>扫雷</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="60"/>
+        <source>invalid option</source>
+        <translation type="unfinished">
+            无效的选项
+        </translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="61"/>
+        <source>You must start a game first</source>
+        <translation type="unfinished">
+            你必须先开始游戏
+        </translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="61"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="174"/>
+        <location filename="../../include/ui_mainwindow.h" line="174"/>
+        <location filename="../../src/mainwindow.cpp" line="115"/>
+        <source>EASY</source>
+        <translation>简单</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="73"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="175"/>
+        <location filename="../../include/ui_mainwindow.h" line="175"/>
+        <location filename="../../src/mainwindow.cpp" line="117"/>
+        <source>MEDIUM</source>
+        <translation>中等</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="89"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="176"/>
+        <location filename="../../include/ui_mainwindow.h" line="176"/>
+        <location filename="../../src/mainwindow.cpp" line="119"/>
+        <source>HARD</source>
+        <translation>困难</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="101"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="177"/>
+        <location filename="../../include/ui_mainwindow.h" line="177"/>
+        <location filename="../../src/mainwindow.cpp" line="122"/>
+        <source>CUSTOM</source>
+        <translation>自定义</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="135"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="180"/>
+        <location filename="../../include/ui_mainwindow.h" line="180"/>
+        <source>Window</source>
+        <translation >
+            选择窗口
+        </translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="148"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="168"/>
+        <location filename="../../include/ui_mainwindow.h" line="168"/>
+        <source>English</source>
+        <translation>
+            英语
+        </translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="153"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="169"/>
+        <location filename="../../include/ui_mainwindow.h" line="169"/>
+        <source>简体中文</source>
+        <translation type="unfinished">
+            中文
+        </translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="147"/>
+        <source>You have already started a game</source>
+        <translation>已有进行中的游戏</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="148"/>
+        <source>Do you wish to abort and start a new one? </source>
+        <translation>
+            是否放弃并开始新的游戏？
+        </translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="163"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="171"/>
+        <location filename="../../include/ui_mainwindow.h" line="171"/>
+        <source>Game</source>
+        <translation>游戏</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="168"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="172"/>
+        <location filename="../../include/ui_mainwindow.h" line="172"/>
+        <source>Record</source>
+        <translation>记录</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="125"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="178"/>
+        <location filename="../../include/ui_mainwindow.h" line="178"/>
+        <source>Exit</source>
+        <translation>退出</translation>
+    </message>
+    <message>
+        <source>Easy</source>
+        <translation type="vanished">简单</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="vanished">中等</translation>
+    </message>
+    <message>
+        <source>Hard</source>
+        <translation type="vanished">困难</translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation type="vanished">自定义</translation>
+    </message>
+    <message>
+        <location filename="../../include/mainwindow.ui" line="158"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="170"/>
+        <location filename="../../include/ui_mainwindow.h" line="170"/>
+        <source>Main</source>
+        <translation>主菜单</translation>
+    </message>
+</context>
 </TS>

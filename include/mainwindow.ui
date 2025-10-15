@@ -1,164 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>MainWindow</class>
-    <widget class="QMainWindow" name="MainWindow">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>800</width>
-                <height>600</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>MineSweeper</string>
-        </property>
-        <property name="tabShape">
-            <enum>QTabWidget::TabShape::Rounded</enum>
-        </property>
-        <widget class="QWidget" name="centralwidget">
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout">
-                <item>
-                    <widget class="QLabel" name="title">
-                        <property name="sizePolicy">
-                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <pointsize>36</pointsize>
-                                <bold>true</bold>
-                            </font>
-                        </property>
-                        <property name="layoutDirection">
-                            <enum>Qt::LayoutDirection::LeftToRight</enum>
-                        </property>
-                        <property name="text">
-                            <string>MINESWEEPER</string>
-                        </property>
-                        <property name="alignment">
-                            <set>Qt::AlignmentFlag::AlignCenter</set>
-                        </property>
-                    </widget>
-                </item>
-                <item>
-                    <layout class="QHBoxLayout" name="actions" stretch="1,1">
-                        <item>
-                            <layout class="QVBoxLayout" name="verticalLayout_3">
-                                <item>
-                                    <widget class="QPushButton" name="bEasy">
-                                        <property name="font">
-                                            <font>
-                                                <pointsize>18</pointsize>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>EASY</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                                <item>
-                                    <widget class="QPushButton" name="bMedium">
-                                        <property name="font">
-                                            <font>
-                                                <pointsize>18</pointsize>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>MEDIUM</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                            </layout>
-                        </item>
-                        <item>
-                            <layout class="QVBoxLayout" name="verticalLayout_4">
-                                <item>
-                                    <widget class="QPushButton" name="bHard">
-                                        <property name="font">
-                                            <font>
-                                                <pointsize>18</pointsize>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>HARD</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                                <item>
-                                    <widget class="QPushButton" name="bCustom">
-                                        <property name="font">
-                                            <font>
-                                                <pointsize>18</pointsize>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>CUSTOM</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                            </layout>
-                        </item>
-                    </layout>
-                </item>
-                <item>
-                    <layout class="QGridLayout" name="iconDemoLayout"/>
-                </item>
-            </layout>
-        </widget>
-        <widget class="QMenuBar" name="menubar">
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>800</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <widget class="QMenu" name="menuMineSweeper">
-                <property name="title">
-                    <string>Game</string>
-                </property>
-            </widget>
-            <widget class="QMenu" name="menuRecord">
-                <property name="title">
-                    <string>Record</string>
-                </property>
-            </widget>
-            <widget class="QMenu" name="menuExit">
-                <property name="title">
-                    <string>Exit</string>
-                </property>
-            </widget>
-            <widget class="QMenu" name="menuLanguage">
-                <property name="title">
-                    <string>Language</string>
-                </property>
-                <addaction name="actionEnglish"/>
-                <addaction name="actionChinese"/>
-            </widget>
-            <addaction name="menuMineSweeper"/>
-            <addaction name="menuRecord"/>
-            <addaction name="menuExit"/>
-            <addaction name="menuLanguage"/>
-        </widget>
-        <widget class="QStatusBar" name="statusbar"/>
-        <action name="actionEnglish">
-            <property name="text">
-                <string>English</string>
-            </property>
-        </action>
-        <action name="actionChinese">
-            <property name="text">
-                <string>简体中文</string>
-            </property>
-        </action>
-    </widget>
-    <resources/>
-    <connections/>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>839</width>
+    <height>587</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MineSweeper</string>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::TabShape::Rounded</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="title">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>36</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string>MINESWEEPER</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="actions" stretch="1,1">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QPushButton" name="bEasy">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>EASY</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bMedium">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>MEDIUM</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QPushButton" name="bHard">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>HARD</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bCustom">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>CUSTOM</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="iconDemoLayout"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>839</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuExit">
+    <property name="title">
+     <string>Exit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="title">
+     <string>Language</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionMain"/>
+    <addaction name="actionGame"/>
+    <addaction name="actionRecord"/>
+   </widget>
+   <addaction name="menuExit"/>
+   <addaction name="menuLanguage"/>
+   <addaction name="menuWindow"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionChinese">
+   <property name="text">
+    <string>简体中文</string>
+   </property>
+  </action>
+  <action name="actionMain">
+   <property name="text">
+    <string>Main</string>
+   </property>
+  </action>
+  <action name="actionGame">
+   <property name="text">
+    <string>Game</string>
+   </property>
+  </action>
+  <action name="actionRecord">
+   <property name="text">
+    <string>Record</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

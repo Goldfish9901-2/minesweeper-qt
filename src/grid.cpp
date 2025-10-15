@@ -1,11 +1,14 @@
-#include "static.h"
+#include "grid.h"
 #include <QMessageBox>
 #include <QResizeEvent>
 #include <QPainter>
-
+#include "field.h"
+#include "mainwindow.h"
 //initializers
 //1. default constructor
-Grid::Grid(QWidget* parent)
+
+using StartOpenResult=Field::StartOpenResult;
+Grid::Grid(Field* parent)
     : Grid{0, 0, parent}
 {
 }
@@ -43,8 +46,9 @@ bool Grid::addNeighbor(Grid* grid)
 }
 
 //5
-Grid::Grid(const int row, const int col, QWidget* parent)
+Grid::Grid(const int row, const int col, Field* parent)
     : QPushButton{parent}
+      , parent(parent)
       , row(row), col(col)
       , surroundingMines(0), mine(false), opened(false)
       , flagged(false)
@@ -57,8 +61,8 @@ Grid::Grid(const int row, const int col, QWidget* parent)
         int gridSize =
             qMin(parent->width(), parent->height())
             / qMax(
-                dynamic_cast<Field*>(parent)->getCols(),
-                dynamic_cast<Field*>(parent)->getRows()
+                parent->getCols(),
+                parent->getRows()
             );
         gridSize = qBound(20, gridSize, 40); // 限制在20-40像素之间
         setFixedSize(gridSize, gridSize);
@@ -143,37 +147,36 @@ bool Grid::isFlagged() const
 //1
 void Grid::mousePressEvent(QMouseEvent* event)
 {
-    Field* f = container(this);
     if (event->button() == Qt::RightButton)
     {
         this->flag();
-        f->updateFlags();
+        parent->updateFlags();
     }
     else if (event->button() == Qt::LeftButton)
     {
         // 使用Field类统一调度打开格子的操作
-        StartOpenResult result = f->openGrid(this);
+        StartOpenResult result = parent->openGrid(this);
         qDebug() << tr("open result") << static_cast<int>(result);
 
         // 根据返回结果显示相应的消息
         switch (result)
         {
         case StartOpenResult::GAME_ALREADY_ENDED:
-            QMessageBox::information(f, tr("Game Over"), tr("Game already ended"));
+            QMessageBox::information(parent, tr("Game Over"), tr("Game already ended"));
             break;
         case StartOpenResult::FLAGGED_GRID:
-            QMessageBox::information(f, tr("Unable to open"), tr("Cannot open flagged grid"));
+            QMessageBox::information(parent, tr("Unable to open"), tr("Cannot open flagged grid"));
             break;
         case StartOpenResult::NOT_ENOUGH_FLAGS:
             {
                 const QString message = tr("Need %1 more flags").arg(surroundingMines - countFlag());
-                QMessageBox::information(f, tr("Not enough flags"), message);
+                QMessageBox::information(parent, tr("Not enough flags"), message);
             }
             break;
         case StartOpenResult::TOO_MANY_FLAGS:
             {
                 const QString message = tr("Too many flags by %1").arg(countFlag() - surroundingMines);
-                QMessageBox::information(f, tr("Too many flags"), message);
+                QMessageBox::information(parent, tr("Too many flags"), message);
             }
             break;
         case StartOpenResult::SUCCESS:
@@ -187,9 +190,9 @@ void Grid::mousePressEvent(QMouseEvent* event)
 //2
 Grid::GridOpenResult Grid::open()
 {
-    if (Field* field = container(this); field && !field->isStarted())
+    if ( parent && !parent->isStarted())
     {
-        field->generateMines(this);
+        parent->generateMines(this);
     }
     if (this->flagged)
     {
@@ -266,9 +269,9 @@ void Grid::renderIcon()
 
 void Grid::renderIcon(const QSize& size)
 {
-    if (mw)
+    if (parent->getParent())
     {
-        mw->renderIcon(currentState, surroundingMines, this, size);
+        parent->getParent()->renderIcon(currentState, surroundingMines, this, size);
     }
 }
 

@@ -5,7 +5,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QSvgRenderer>
-
+class Field;
 class Grid final : public QPushButton
 {
     Q_OBJECT
@@ -44,8 +44,8 @@ public:
         OPENED
     };
 
-    explicit Grid(QWidget* parent = nullptr);
-    Grid(int row, int col, QWidget* parent = nullptr);
+    explicit Grid(Field* parent = nullptr);
+    Grid(int row, int col, Field* parent = nullptr);
     ~Grid() override;
     Grid& operator=(const Grid& grid);
     bool addNeighbor(Grid* grid);
@@ -70,6 +70,7 @@ public:
     State updateState(bool reveal);
 
 private:
+    Field* parent;
     unsigned short row, col, surroundingMines;
     bool mine;
     bool opened;

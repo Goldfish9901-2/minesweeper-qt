@@ -1,7 +1,7 @@
 //
 // Created by jerry on 2025/10/15.
 //
-#include "static.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <QFile>

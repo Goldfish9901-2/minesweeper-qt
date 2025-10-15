@@ -3,6 +3,7 @@
 
 #include "grid.h"
 #include "field.h"
+#include "recordview.h"
 
 #include <QMainWindow>
 #include <QSvgRenderer>
@@ -27,24 +28,33 @@ class MainWindow final : public QMainWindow
 
 public:
     std::vector<Field*> fields;
+    void initInternational();
+    void initAutoAdjust();
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
     const std::string resourcePrefix, mineNumberPrefix;
     // 存储实际支持的语言列表（基于成功加载的翻译文件）
     static std::set<QString> supportedLocales;
-    bool tryRegisterTranslation(const QString& langID) const;
+    [[nodiscard]] bool tryRegisterTranslation(const QString& langID) const;
+
 
     // Public interface for rendering icons
     void renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const;
     void renderIcon(Grid::State state, int surroundingMines, QPushButton* button, const QSize& size) const;
 
     [[nodiscard]] int getOffset() const;
-    static void easy();
-    static void medium();
-    static void hard();
-    static void custom();
+    void easy();
+    void medium();
+    void hard();
+    void custom();
     // 将Difficulty枚举转换为std::string
     static QString difficultyToStringStandard(Field::GameMode difficulty);
+
+
+    void returnToMainMenu(bool destroyGame);
+
+public slots:
+    void returnToMainMenu() { returnToMainMenu(false); }
 
 private:
     static QIcon loadSvg(const QString& path);
@@ -64,12 +74,15 @@ private:
 
     // 动态创建语言菜单项
     void createLanguageMenu();
-
     void testIcons();
     void loadTestIcon(const QString& iconName, int r, int c);
 
     // 根据难度创建游戏
-    static void createGame(Field::GameMode difficulty);
+    void createGame(Field::GameMode difficulty);
+    Field* field;
+    
+    // 记录视图
+    RecordView* recordView;
 
     // Individual renderer methods - 修改为直接设置图标到按钮
     void setBlankIcon(QPushButton* button) const;
@@ -78,11 +91,12 @@ private:
     void setMineIcon(QPushButton* button) const;
     void setMineTriggeredIcon(QPushButton* button) const;
     void setSurroundingMineIcon(int number, QPushButton* button) const;
+    void hideAll() const;
 
 private slots:
-    
     // 动态语言切换槽函数
-    void onLanguageActionTriggered(const QString& language) ;
+    void onLanguageActionTriggered(const QString& language);
+    void showRecordView();
 };
 
 #endif // MAINWINDOW_H

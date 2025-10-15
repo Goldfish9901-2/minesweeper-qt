@@ -15,7 +15,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Svg SvgWidgets)
 set(QT_VERSION_MAJOR 6)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Sql)
 qt_standard_project_setup(
         I18N_TRANSLATED_LANGUAGES zh_CN en_US
 )
@@ -43,8 +43,6 @@ set(PROJECT_SOURCES
         include/grid.h
         src/grid.cpp
 
-        include/static.h
-        include/base_interface.h
         ms.qrc
 
         ${TS_FILES}
@@ -54,6 +52,12 @@ set(PROJECT_SOURCES
 
         include/LanguageChoiceAction.h
         src/LanguageChoiceAction.cpp
+        include/record.h
+        include/database.h
+        src/database.cpp
+        include/recordview.h
+        src/recordview.cpp
+        include/record.ui
 )
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MineSweeper
@@ -116,6 +120,7 @@ target_link_libraries(MineSweeper
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Svg
         Qt${QT_VERSION_MAJOR}::SvgWidgets
+        Qt${QT_VERSION_MAJOR}::Sql
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

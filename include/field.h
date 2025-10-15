@@ -1,30 +1,28 @@
-
-
-
-#ifndef FIELD_H
-#define FIELD_H
-#include <QWidget>
+#pragma once
 #include <QTimer>
 #include <set>
 
 #include "grid.h"
 #include "ui_field.h"
 class MainWindow;
-
-enum class StartOpenResult
-{
-    NULLPTR,
-    SUCCESS,
-    GAME_ALREADY_ENDED,
-    FLAGGED_GRID,
-    NOT_ENOUGH_FLAGS,
-    TOO_MANY_FLAGS,
-    MINE_TRIGGERED
-};
+class Field;
+#ifndef MINESWEEPER_FIELD_H
+#define MINESWEEPER_FIELD_H
 
 class Field final : public QWidget
 {
 public:
+    enum class StartOpenResult
+    {
+        NULLPTR,
+        SUCCESS,
+        GAME_ALREADY_ENDED,
+        FLAGGED_GRID,
+        NOT_ENOUGH_FLAGS,
+        TOO_MANY_FLAGS,
+        MINE_TRIGGERED
+    };
+
     enum class GameMode
     {
         EASY,
@@ -36,25 +34,22 @@ public:
     Q_OBJECT
 
 public:
-    explicit Field(QWidget* parent = nullptr) : Field(10, 10, 10)
+    explicit Field(MainWindow* parent = nullptr)
+        : Field(10, 10, 10, GameMode::EASY, parent)
     {
     }
 
     Field(unsigned short rows,
           unsigned short cols,
           unsigned short mines,
-          GameMode mode = GameMode::CUSTOM, QWidget* parent = nullptr);
-    Field(unsigned short rows,
-          unsigned short cols,
-          unsigned short mines,
-          GameMode mode,
-          Field* parentField);
+          GameMode mode = GameMode::CUSTOM, MainWindow* parent = nullptr);
     ~Field() override;
 
-    void generateMines(Grid* start);
+    void generateMines(const Grid* start);
     bool lose(const Grid* grid);
+    void win();
     [[nodiscard]] bool isStarted() const;
-    bool contains(Grid* grid) const;
+    bool contains(const Grid* grid) const;
 
     void updateFlags() const;
     StartOpenResult openGrid(Grid* start);
@@ -81,6 +76,13 @@ public:
         return cols;
     }
 
+    bool isGaming() const
+    {
+        return isStarted() && timer != nullptr && timer->isActive();
+    }
+
+    void retranslateUi();
+
 private:
     int secs;
     bool started;
@@ -92,9 +94,19 @@ private:
     void onOpenRequest(Grid* grid);
     void registerOpened(Grid* grid);
     void displayField() const;
+    MainWindow* mainWindow;
 
+public:
+    [[nodiscard]] MainWindow* getParent() const
+    {
+        return mainWindow;
+    }
+
+private:
     [[nodiscard]] int flatLoc(int r, int c) const;
+
+    void traverseRow_Cols(const std::function<void(int, int)>& receiver) const;
 };
 
 
-#endif // FIELD_H
+#endif // MINESWEEPER_FIELD_H

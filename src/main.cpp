@@ -1,4 +1,4 @@
-#include "static.h"
+#include "field.h"
 #include "mainwindow.h"
 
 #include <QApplication>
@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     qDebug() << " application started. loading translations...";
-
+    std::shared_ptr<MainWindow> mw;
     mw = std::make_shared<MainWindow>(new MainWindow());
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -35,16 +35,4 @@ int main(int argc, char* argv[])
 
     mw->show();
     return QApplication::exec();
-}
-
-Field* container(Grid* grid)
-{
-    for (const auto& field : mw->fields)
-    {
-        if (field->contains(grid))
-        {
-            return field;
-        }
-    }
-    return nullptr;
 }

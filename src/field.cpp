@@ -1,30 +1,31 @@
+#include "field.h"
+#include "grid.h"
 #include "mainwindow.h"
-#include "static.h"
-#include <QString>
 #include <QMessageBox>
-#include <QScreen>
-#include <QGuiApplication>
-#include <QObject>
+#include <QTimer>
 #include <random>
-#include <chrono>
-#include <iostream>
 #include <queue>
-
+#include <set>
+#include <functional>
+#include <iostream>
+#include <chrono>
+#include "ui_field.h"
+#include "database.h"
 
 Field::Field(
     const unsigned short rows,
     const unsigned short cols,
     const unsigned short mines,
     const GameMode mode,
-    QWidget* parent)
+    MainWindow* parent)
     : //basic setup
     QWidget{parent}, ui(new Ui_Field),
     //initializing variables
     rows(rows), cols(cols), mines(mines),
-    secs(0),
-    started(false),
+    secs(0), started(false),
     grids(std::vector<Grid*>()), finishedGrids(std::set<Grid*>()),
-    timer(new QTimer(this)), mode(mode)
+    timer(new QTimer(this)),
+    mode(mode), mainWindow(parent)
 {
     ui->setupUi(this);
 
@@ -39,19 +40,17 @@ Field::Field(
         static_cast<int>(screenHeight * 0.8));
     this->move((screenWidth - this->width()) / 2, (screenHeight - this->height()) / 2);
 
-    mw->fields.push_back(this);
+    parent->fields.push_back(this);
     const auto modeString = MainWindow::difficultyToStringStandard(this->mode);
     ui->lMode->setText(modeString);
     setWindowTitle(modeString);
     this->ui->gridLayout->setRowMinimumHeight(rows, rows);
 
-    for (int i = 0; i < rows; i++)
+    traverseRow_Cols([this](const int r, const int c)
     {
-        for (int j = 0; j < cols; j++)
-        {
-            grids.push_back(new Grid(i, j, this));
-        }
-    }
+        grids.push_back(new Grid(r, c, this));
+    });
+
 
     for (int r = 0; r < rows; r++)
     {
@@ -75,95 +74,19 @@ Field::Field(
             }
         }
     }
-    for (int r = 0; r < rows; r++)
-        for (int c = 0; c < cols; c++)
-        {
-            this->ui->gridLayout->addWidget(
-                grids.at(r * cols + c), r, c
-            );
-        }
-}
-
-
-Field::Field(
-    const unsigned short rows,
-    const unsigned short cols,
-    const unsigned short mines,
-    const GameMode mode,
-    Field* parentField)
-    : //basic setup
-    QWidget{parentField}, ui(new Ui_Field),
-    //initializing variables
-    rows(rows), cols(cols), mines(mines),
-    secs(0),
-    started(false),
-    grids(std::vector<Grid*>()), finishedGrids(std::set<Grid*>()),
-    timer(new QTimer(this)), mode((mode))
-
-{
-    ui->setupUi(this);
-
-
-    // 设置窗口自适应屏幕大小
-    const QScreen* screen = QGuiApplication::primaryScreen();
-    const QRect screenGeometry = screen->geometry();
-    const int screenWidth = screenGeometry.width();
-    const int screenHeight = screenGeometry.height();
-    this->resize(
-        static_cast<int>(screenWidth * 0.8),
-        static_cast<int>(screenHeight * 0.8));
-    this->move((screenWidth - this->width()) / 2, (screenHeight - this->height()) / 2);
-
-    mw->fields.push_back(this);
-    const auto modeString = MainWindow::difficultyToStringStandard(this->mode);
-    ui->lMode->setText(modeString);
-    setWindowTitle(modeString);
-    this->ui->gridLayout->setRowMinimumHeight(rows, rows);
-
-    for (int i = 0; i < rows; i++)
+    traverseRow_Cols([this](const int r, const int c)
     {
-        for (int j = 0; j < cols; j++)
-        {
-            grids.push_back(new Grid(i, j, this));
-        }
-    }
-
-    for (int r = 0; r < rows; r++)
-    {
-        for (int c = 0; c < cols; c++)
-        {
-            Grid* temp = grids.at(r * cols + c);
-            connect(temp, &Grid::check, this, &Field::check);
-            for (int ri = r - 1; ri <= r + 1; ri++)
-            {
-                for (int ci = c - 1; ci <= c + 1; ci++)
-                {
-                    if (ri < 0 || ri >= rows)
-                        continue;
-                    if (ci < 0 || ci >= cols)
-                        continue;
-                    if (ri == r && ci == c)
-                        continue;
-                    Grid* neighbor = this->grids.at(flatLoc(ri, ci));
-                    temp->addNeighbor(neighbor);
-                }
-            }
-        }
-    }
-    for (int r = 0; r < rows; r++)
-        for (int c = 0; c < cols; c++)
-        {
-            this->ui->gridLayout->addWidget(
-                grids.at(r * cols + c), r, c
-            );
-        }
+        this->ui->gridLayout->addWidget(
+            grids.at(r * this->cols + c), r, c
+        );
+    });
 }
 
 
 Field::~Field()
 {
     // No need to manually clean up QSvgRenderer objects as they are now value types
-    
+
     // delete random;
     for (const auto& grid : grids)
     {
@@ -171,11 +94,10 @@ Field::~Field()
     }
     grids.clear();
     delete ui;
-    const auto it = std::find(mw->fields.begin(), mw->fields.end(), this);
-    mw->fields.erase(it);
+
 }
 
-void Field::generateMines(Grid* start)
+void Field::generateMines(const Grid* start)
 {
     if (started)
         return;
@@ -218,7 +140,7 @@ void Field::generateMines(Grid* start)
 
 bool Field::lose(const Grid* grid)
 {
-    if (!started)
+    if (!started || !timer->isActive())
         return false;
     // 如果是雷，游戏结束
     if (!grid->isMine())
@@ -232,8 +154,36 @@ bool Field::lose(const Grid* grid)
     }
     if (started)
         QMessageBox::information(this, tr("Game Over"), tr("You Lost"));
+    mainWindow->returnToMainMenu();
     // delete this;
     return true;
+}
+
+void Field::win()
+{
+    /*
+         * nothing more to do
+         * hooray! win！
+         */
+    timer->stop();
+    //delete timer;
+    for (const auto& t : this->grids)
+    {
+        t->reveal();
+    }
+    
+    // 保存游戏记录到数据库
+    DatabaseManager dbManager;
+    if (dbManager.init()) {
+        const Record record(this->mode, this->rows, this->cols, this->mines, this->secs);
+        dbManager.saveRecord(record);
+    } else {
+        qDebug() << "Failed to initialize database";
+    }
+    
+    QMessageBox::information(this, tr("Game Over"), tr("You Won"));
+    // delete this;
+    mainWindow->returnToMainMenu();
 }
 
 void Field::check(Grid* grid)
@@ -247,21 +197,9 @@ void Field::check(Grid* grid)
     // 检查是否所有非雷格子都已经打开
     if (finishedGrids.size() == rows * cols - mines)
     {
-        /*
-         * nothing more to do
-         * hooray! win！
-         */
-        timer->stop();
-        //delete timer;
-        for (const auto& t : this->grids)
-        {
-            t->reveal();
-        }
-        QMessageBox::information(this, tr("Game Over"), tr("You Won"));
-        // delete this;
+        win();
     }
 }
-
 
 
 void Field::onOpenRequest(Grid* grid)
@@ -326,13 +264,23 @@ int Field::flatLoc(const int r, const int c) const
     return res;
 }
 
-bool Field::contains(Grid* grid) const
+void Field::traverseRow_Cols(const std::function<void(int, int)>& receiver) const
+{
+    for (int r = 0; r < rows; r++)
+        for (int c = 0; c < cols; c++)
+            receiver(r, c);
+}
+
+void Field::retranslateUi()
+{
+    ui->retranslateUi(this);
+}
+
+bool Field::contains(const Grid* grid) const
 {
     const auto it = std::find(grids.begin(), grids.end(), grid);
     return it != grids.end();
 }
-
-//static Field* Field::container(Grid* grid)
 
 bool Field::isStarted() const
 {
@@ -357,13 +305,14 @@ void Field::updateTime()
     secs++;
     ui->lTime->setText(QString::number(secs));
 }
+
 /**
  * @brief Field::openGrid
  * a method to automatically open surrounding available grids
  * @param start the grid to start the automation
  * @return the automation status <br/> note that this value does not necessarily mean the success of the game
  */
-StartOpenResult Field::openGrid(Grid* start)
+Field::StartOpenResult Field::openGrid(Grid* start)
 {
     // 检查游戏是否已开始
 
@@ -441,3 +390,4 @@ void Field::displayField() const
         row += buf;
     }
 }
+

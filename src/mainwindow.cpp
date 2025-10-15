@@ -1,4 +1,5 @@
-#include "static.h"
+#include "mainwindow.h"
+#include "field.h"
 #include "ui_mainwindow.h"
 
 #include <QFile>
@@ -10,12 +11,15 @@
 #include <QApplication>
 #include <QLocale>
 #include <QAction>
+#include <QMessageBox>
 
 #include "grid.h"
 #include "LanguageChoiceAction.h"
+#include "recordview.h"
 using Difficulty = Field::GameMode;
 std::unique_ptr<QSvgRenderer> loadRenderer(const std::string& resourcePrefix, const std::string& fileName);
 std::vector<std::unique_ptr<QSvgRenderer>> loadNumberRenderers(const std::string& mineNumberPrefix);
+
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -27,20 +31,16 @@ MainWindow::MainWindow(QWidget* parent)
       , flagIconRenderer(loadRenderer(resourcePrefix, "flag.svg"))
       , mineIconRenderer(loadRenderer(resourcePrefix, "mine.svg"))
       , mineTriggeredIconRenderer(loadRenderer(resourcePrefix, "exploded.svg"))
-
       , surroundingMineIconRenderers(loadNumberRenderers(mineNumberPrefix))
+
       , translator(new QTranslator(this))
+      , field(nullptr)
+      , recordView(nullptr)
 {
     offset = static_cast<int>(surroundingMineIconRenderers.size());
     ui->setupUi(this);
 
-    // 设置窗口自适应屏幕大小
-    const QScreen* screen = QGuiApplication::primaryScreen();
-    const QRect screenGeometry = screen->geometry();
-    const int screenWidth = screenGeometry.width();
-    const int screenHeight = screenGeometry.height();
-    this->resize(static_cast<int>(screenWidth * 0.8), static_cast<int>(screenHeight * 0.8));
-    this->move((screenWidth - this->width()) / 2, (screenHeight - this->height()) / 2);
+    initAutoAdjust();
 
     // Set window icon using the old method since we can't use renderIcon directly on MainWindow
     setWindowIcon(loadSvg(QString::fromStdString(resourcePrefix + "mine.svg")));
@@ -50,40 +50,34 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->bCustom, &QPushButton::clicked, this, &MainWindow::custom);
     connect(ui->bMedium, &QPushButton::clicked, this, &MainWindow::medium);
 
-    // 初始化语言支持
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-
-    // 遍历系统语言，尝试加载对应的翻译文件
-    for (const QString& locale : uiLanguages)
+    connect(ui->actionMain, &QAction::triggered, this, [this](bool)
     {
-        qWarning() << "found " << locale;
-        const QString localeName = QLocale(locale).name();
-
-        // 尝试加载该语言的翻译文件
-        if (tryRegisterTranslation(localeName))
+        this->returnToMainMenu();
+    });
+    connect(ui->actionGame, &QAction::triggered, this, [this](bool)
+    {
+        if (!field)
         {
-            qDebug() << "Successfully loaded translation for" << localeName;
+            QMessageBox::warning(
+                this,
+                tr("invalid option"),
+                tr("You must start a game first")
+            );
+            emit ui->actionMain->triggered();
+            return;
         }
-        else
-        {
-            qWarning() << locale << " failed";
-        }
-    }
+        hideAll();
+        field->show();
+    });
 
+    // 连接记录视图动作
+    connect(ui->actionRecord, &QAction::triggered, this, &MainWindow::showRecordView);
 
-    // 创建语言菜单
-    createLanguageMenu();
+    initInternational();
 }
 
 MainWindow::~MainWindow()
 {
-    for (const auto& field : fields)
-    {
-        delete field;
-    }
-    fields.clear();
-    delete ui;
-    mw.reset();
 }
 
 int MainWindow::getOffset() const
@@ -128,29 +122,75 @@ QString MainWindow::difficultyToStringStandard(Difficulty difficulty)
     }
 }
 
+void MainWindow::returnToMainMenu(const bool destroyGame)
+{
+    hideAll();
+
+    if (destroyGame)
+    {
+        delete field;
+        field = nullptr;
+    }
+
+    ui->centralwidget->show();
+}
+
 void MainWindow::createGame(const Difficulty difficulty)
 {
-    Field* field = nullptr;
+    ui->centralwidget->hide();
+    if (field)
+    {
+        if (field->isGaming())
+        {
+            const auto result = QMessageBox::question(
+                this,
+                tr("You have already started a game"),
+                tr("Do you wish to abort and start a new one? "),
+                QMessageBox::Yes | QMessageBox::No,
+                QMessageBox::No
+            );
+            if (result == QMessageBox::No)
+            {
+                return;
+            }
+        }
+        field->hide();
+        delete field;
+    }
     switch (difficulty)
     {
     case Difficulty::EASY:
-        field = new Field(10, 10, 10, Field::GameMode::EASY);
+        field = new Field(10, 10, 10, Field::GameMode::EASY, this);
         break;
     case Difficulty::MEDIUM:
-        field = new Field(16, 16, 40, Field::GameMode::MEDIUM);
+        field = new Field(16, 16, 40, Field::GameMode::MEDIUM, this);
         break;
     case Difficulty::HARD:
-        field = new Field(16, 30, 99, Field::GameMode::HARD);
+        field = new Field(16, 30, 99, Field::GameMode::HARD, this);
         break;
     case Difficulty::CUSTOM:
     default:
-        field = new Field(10, 10, 10, Field::GameMode::CUSTOM);
+        field = new Field(10, 10, 10, Field::GameMode::CUSTOM, this);
         break;
     }
     field->show();
 }
 
-
+void MainWindow::showRecordView()
+{
+    if (!recordView) {
+        recordView = new RecordView(this);
+    }
+    
+    // 隐藏其他界面元素
+    hideAll();
+    
+    // 显示记录视图窗口
+    recordView->refresh();
+    recordView->show();
+    recordView->raise();  // 确保窗口在最前面
+    recordView->activateWindow();  // 激活窗口
+}
 
 // 动态创建语言菜单项
 void MainWindow::createLanguageMenu()
@@ -160,7 +200,6 @@ void MainWindow::createLanguageMenu()
     QMenu* languageMenu = this->ui->menuLanguage;
     if (!languageMenu)
     {
-
         return;
     }
     // 清除现有动作（如果有的话）
@@ -284,83 +323,12 @@ void MainWindow::setSurroundingMineIcon(int number, QPushButton* button) const
     button->setIconSize(buttonSize);
 }
 
-void MainWindow::renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const
+void MainWindow::hideAll() const
 {
-    QSize buttonSize = button->size();
-    if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
-    {
-        buttonSize = QSize(32, 32); // Default size
-    }
-
-    renderIcon(state, surroundingMines, button, buttonSize);
-}
-
-void MainWindow::renderIcon(Grid::State state, const int surroundingMines, QPushButton* button, const QSize& size) const
-{
-    if (!button)
-    {
-        return;
-    }
-
-    QSvgRenderer* renderer = nullptr;
-
-    switch (state)
-    {
-    case Grid::State::OPENED:
-        qDebug() << QString("rendering icon for surrounding: %1").arg(surroundingMines);
-        if (surroundingMines == 0)
-        {
-            renderer = noAroundIconRenderer.get();
-        }
-        else if (surroundingMines >= 1 && surroundingMines <= 8)
-        {
-            renderer = surroundingMineIconRenderers.at(surroundingMines - 1).get();
-        }
-        else
-        {
-            qDebug() << QString("not a valid surrounding count: %1").arg(surroundingMines);
-            return;
-        }
-        break;
-    case Grid::State::FLAGGED:
-        renderer = flagIconRenderer.get();
-        break;
-    case Grid::State::TRIGGERED:
-        renderer = mineIconRenderer.get();
-        break;
-    case Grid::State::UNOPENED:
-        renderer = blankIconRenderer.get();
-        break;
-    }
-
-    if (!renderer)
-    {
-        qDebug() << "No SVG renderer for state:" << static_cast<int>(state);
-        return;
-    }
-    if (!renderer->isValid())
-    {
-        qDebug() << "Invalid SVG renderer for state:" << static_cast<int>(state);
-        return;
-    }
-
-    QPixmap pix(size);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    renderer->render(&painter);
-    button->setIcon(QIcon(pix));
-    button->setIconSize(size);
+    ui->centralwidget->hide();
+    if (field) field->hide();
+    if (recordView) recordView->hide();
 }
 
 
-QIcon MainWindow::loadSvg(const QString& path)
-{
-    qDebug() << path << " exists? " << QFile::exists(path);
-    const QSize& size = QSize(32, 32);
-    QSvgRenderer renderer(path);
-    QPixmap pix(size);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    renderer.render(&painter);
-    return QIcon(pix);
-}
+
