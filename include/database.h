@@ -15,14 +15,14 @@ public:
     ~DatabaseManager();
 
     bool init();
-    bool saveRecord(const Record& record);
+    bool saveRecord(const Record& record) const;
     QList<Record> getRecords(Field::GameMode mode) const;
     QList<Record> getAllRecords() const;
 
 private:
     QSqlDatabase db;
     QString dbPath;
-    bool createTables();
+    bool createTables() const;
 };
 
 #endif //MINESWEEPER_DATABASE_H

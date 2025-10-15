@@ -38,12 +38,12 @@ bool DatabaseManager::init()
     return createTables();
 }
 
-bool DatabaseManager::createTables()
+bool DatabaseManager::createTables() const
 {
     QSqlQuery query(db);
     
     // 创建记录表
-    QString createTableQuery = R"(
+    const QString createTableQuery = R"(
         CREATE TABLE IF NOT EXISTS records (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             mode INTEGER NOT NULL,
@@ -63,7 +63,7 @@ bool DatabaseManager::createTables()
     return true;
 }
 
-bool DatabaseManager::saveRecord(const Record& record)
+bool DatabaseManager::saveRecord(const Record& record) const
 {
     QSqlQuery query(db);
     query.prepare("INSERT INTO records (mode, width, height, mines, secs) VALUES (?, ?, ?, ?, ?)");
