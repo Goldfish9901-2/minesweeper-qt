@@ -14,16 +14,20 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Svg SvgWidgets)
 
 set(QT_VERSION_MAJOR 6)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+qt_standard_project_setup(
+        I18N_TRANSLATED_LANGUAGES zh_CN en_US
+)
 
-set(TS_FILES 
-    res/MineSweeper_zh_CN.ts
-    res/MineSweeper_en.ts
+set(TS_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/res/i18n/MineSweeper_zh_CN.ts
+        ${CMAKE_CURRENT_SOURCE_DIR}/res/i18n/MineSweeper_en.ts
 )
 set(CMAKE_AUTOUIC_SEARCH_PATHS
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -61,27 +65,30 @@ if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
     # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
-    # qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+#    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
     qt_add_translations(MineSweeper
-            TS_FILES res/MineSweeper_zh_CN.ts res/MineSweeper_en.ts
+            TS_FILES ${TS_FILES}
+            TS_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res/i18n
             RESOURCE_PREFIX /i18n
     )
-    
-#    # 添加生成的.qm文件到资源文件
-#    set_source_files_properties(ms.qrc PROPERTIES QT_RESOURCE_ALIAS_PATH "/i18n")
-#    set_source_files_properties(${qmFiles} PROPERTIES
-#        QT_RESOURCE_ALIAS_PATH "/i18n")
+
+    #    # 添加生成的.qm文件到资源文件
+    set_source_files_properties(ms.qrc PROPERTIES QT_RESOURCE_ALIAS_PATH "/i18n")
+    set_source_files_properties(${qmFiles} PROPERTIES
+            QT_RESOURCE_ALIAS_PATH "/i18n")
 
 else ()
     if (ANDROID)
         add_library(MineSweeper SHARED
                 ${PROJECT_SOURCES}
+                ${QM_FILES}
         )
         # Define properties for Android with Qt 5 after find_package() calls as:
         #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else ()
         add_executable(MineSweeper
                 ${PROJECT_SOURCES}
+                ${QM_FILES}
         )
     endif ()
 
@@ -90,17 +97,25 @@ endif ()
 if (WIN32)
     target_sources(MineSweeper PRIVATE res/appicon.rc)
 endif ()
-if(MSVC)
+if (MSVC)
     add_compile_options("/utf-8")
-endif()
+endif ()
+
+set_target_properties(MineSweeper PROPERTIES
+        WIN32_EXECUTABLE TRUE
+        MACOSX_BUNDLE TRUE
+)
 
 target_include_directories(MineSweeper PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(MineSweeper
-    PRIVATE
-    Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Svg
-    Qt${QT_VERSION_MAJOR}::SvgWidgets
+        PRIVATE
+        Qt${QT_VERSION_MAJOR}::Core
+        Qt${QT_VERSION_MAJOR}::Gui
+
+        Qt${QT_VERSION_MAJOR}::Widgets
+        Qt${QT_VERSION_MAJOR}::Svg
+        Qt${QT_VERSION_MAJOR}::SvgWidgets
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
