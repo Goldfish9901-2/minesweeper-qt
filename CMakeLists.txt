@@ -68,7 +68,7 @@ if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 #    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
     qt_add_translations(MineSweeper
             TS_FILES ${TS_FILES}
-            TS_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/res/i18n
+            ${CMAKE_CURRENT_BINARY_DIR}/res/i18n
             RESOURCE_PREFIX /i18n
     )
 
