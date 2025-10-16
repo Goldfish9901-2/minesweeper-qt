@@ -88,7 +88,7 @@ void MainWindow::renderIcon(Grid::State state, const int surroundingMines, QPush
         renderer = flagIconRenderer.get();
         break;
     case Grid::State::TRIGGERED:
-        renderer = mineIconRenderer.get();
+        renderer = mineTriggeredIconRenderer.get();
         break;
     case Grid::State::UNOPENED:
         renderer = blankIconRenderer.get();
