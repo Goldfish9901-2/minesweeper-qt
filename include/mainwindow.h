@@ -13,6 +13,9 @@
 #include <QAction>
 #include <set>
 
+#include "Localeable.h"
+#include "ui_mainwindow.h"
+
 QT_BEGIN_NAMESPACE
 
 namespace Ui
@@ -22,7 +25,7 @@ namespace Ui
 
 QT_END_NAMESPACE
 
-class MainWindow final : public QMainWindow
+class MainWindow final : public QMainWindow,public Localeable
 {
     Q_OBJECT
 
@@ -97,6 +100,7 @@ private slots:
     // 动态语言切换槽函数
     void onLanguageActionTriggered(const QString& language);
     void showRecordView();
+    void retranslate() override{ui->retranslateUi(this);}
 };
 
 #endif // MAINWINDOW_H

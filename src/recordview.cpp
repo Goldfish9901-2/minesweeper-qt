@@ -10,13 +10,14 @@
 RecordView::RecordView(QWidget* parent) : QWidget(parent), ui(new Ui::RecordView)
 {
     ui->setupUi(this);
-    
+
     // 设置窗口属性，使其成为独立窗口
     setWindowFlags(Qt::Window);
     setAttribute(Qt::WA_DeleteOnClose, false); // 不在关闭时删除对象
 
     // 初始化数据库
-    if (!dbManager.init()) {
+    if (!dbManager.init())
+    {
         qDebug() << "Failed to initialize database in RecordView";
     }
 
@@ -26,9 +27,7 @@ RecordView::RecordView(QWidget* parent) : QWidget(parent), ui(new Ui::RecordView
     connect(ui->refreshButton, &QPushButton::clicked, this, &RecordView::onRefreshClicked);
     connect(ui->backButton, &QPushButton::clicked, this, &RecordView::onBackClicked);
 
-    // 初始化记录显示
-    loadRecords();
-    displayRecords();
+    refresh();
 }
 
 RecordView::~RecordView()
@@ -40,24 +39,24 @@ void RecordView::refresh()
 {
     loadRecords();
     displayRecords();
+    retranslate();
 }
 
 void RecordView::onModeChanged(int index)
 {
-    loadRecords();
-    displayRecords();
+    retranslate();
 }
 
 void RecordView::onRefreshClicked()
 {
-    loadRecords();
-    displayRecords();
+    refresh();
 }
 
 void RecordView::onBackClicked()
 {
     auto* mainWindow = qobject_cast<MainWindow*>(parent());
-    if (mainWindow) {
+    if (mainWindow)
+    {
         hide();
         mainWindow->returnToMainMenu();
     }
@@ -66,8 +65,9 @@ void RecordView::onBackClicked()
 void RecordView::loadRecords()
 {
     int modeIndex = ui->modeComboBox->currentIndex();
-    
-    switch (modeIndex) {
+
+    switch (modeIndex)
+    {
     case 0: // All
         records = dbManager.getAllRecords();
         break;
@@ -91,37 +91,39 @@ void RecordView::loadRecords()
 
 void RecordView::displayRecords()
 {
+    retranslate();
     ui->recordTable->setRowCount(0); // 清空现有记录
-    
-    for (const auto& record : records) {
+
+    for (const auto& record : records)
+    {
         int row = ui->recordTable->rowCount();
         ui->recordTable->insertRow(row);
-        
+
         // Mode
         auto* modeItem = new QTableWidgetItem(modeToString(record.mode));
         modeItem->setTextAlignment(Qt::AlignCenter);
         ui->recordTable->setItem(row, 0, modeItem);
-        
+
         // Width
         auto* widthItem = new QTableWidgetItem(QString::number(record.width));
         widthItem->setTextAlignment(Qt::AlignCenter);
         ui->recordTable->setItem(row, 1, widthItem);
-        
+
         // Height
         auto* heightItem = new QTableWidgetItem(QString::number(record.height));
         heightItem->setTextAlignment(Qt::AlignCenter);
         ui->recordTable->setItem(row, 2, heightItem);
-        
+
         // Mines
         auto* minesItem = new QTableWidgetItem(QString::number(record.mines));
         minesItem->setTextAlignment(Qt::AlignCenter);
         ui->recordTable->setItem(row, 3, minesItem);
-        
+
         // Time
         auto* timeItem = new QTableWidgetItem(QString::number(record.secs));
         timeItem->setTextAlignment(Qt::AlignCenter);
         ui->recordTable->setItem(row, 4, timeItem);
-        
+
         // Placeholder for date (as our current database schema doesn't store date)
         auto* dateItem = new QTableWidgetItem(tr("N/A"));
         dateItem->setTextAlignment(Qt::AlignCenter);
@@ -131,7 +133,9 @@ void RecordView::displayRecords()
 
 QString RecordView::modeToString(Field::GameMode mode) const
 {
-    switch (mode) {
+
+    switch (mode)
+    {
     case Field::GameMode::EASY:
         return tr("Easy");
     case Field::GameMode::MEDIUM:

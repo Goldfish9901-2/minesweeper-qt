@@ -58,6 +58,9 @@ set(PROJECT_SOURCES
         include/recordview.h
         src/recordview.cpp
         include/record.ui
+        src/Localeable.cpp
+        include/Localeable.h
+        include/Localeable.h
 )
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MineSweeper

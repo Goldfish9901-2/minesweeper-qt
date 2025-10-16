@@ -10,13 +10,15 @@
 #include "database.h"
 #include "ui_record.h"
 
-class RecordView : public QWidget
+class RecordView : public QWidget,public Localeable
 {
 Q_OBJECT
 
 public:
     explicit RecordView(QWidget* parent = nullptr);
     ~RecordView() override;
+
+    void retranslate() override{ui->retranslateUi(this);}
 
     void refresh();
 

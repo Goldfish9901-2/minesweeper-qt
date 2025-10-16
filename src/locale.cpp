@@ -55,6 +55,8 @@ void MainWindow::onLanguageActionTriggered(const QString& language)
         ui->retranslateUi(this); // 刷新 UI 文本
         if (field != nullptr  && field->isGaming())
             field->retranslateUi();
+        if (recordView != nullptr)
+            recordView->retranslate();
         return;
     }
     QMessageBox::warning(

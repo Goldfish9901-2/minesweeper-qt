@@ -183,7 +183,7 @@ void MainWindow::showRecordView()
     }
     
     // 隐藏其他界面元素
-    hideAll();
+    // hideAll();
     
     // 显示记录视图窗口
     recordView->refresh();

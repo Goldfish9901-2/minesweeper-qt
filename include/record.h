@@ -13,7 +13,11 @@ public:
      const Field::GameMode mode;
      const unsigned short width, height, mines;
      const unsigned _int32 secs;
-     Record(Field::GameMode mode, unsigned short width, unsigned short height, unsigned short mines, unsigned _int32 secs)
+     Record(const Field::GameMode mode,
+         const unsigned short width,
+         const unsigned short height,
+         const unsigned short mines,
+         const unsigned _int32 secs)
          : mode(mode), width(width), height(height), mines(mines), secs(secs)
      {
      }

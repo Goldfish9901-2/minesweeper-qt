@@ -3,13 +3,14 @@
 #include <set>
 
 #include "grid.h"
+#include "Localeable.h"
 #include "ui_field.h"
 class MainWindow;
 class Field;
 #ifndef MINESWEEPER_FIELD_H
 #define MINESWEEPER_FIELD_H
 
-class Field final : public QWidget
+class Field final : public QWidget, public Localeable
 {
 public:
     enum class StartOpenResult
@@ -50,7 +51,7 @@ public:
     void win();
     [[nodiscard]] bool isStarted() const;
     bool contains(const Grid* grid) const;
-
+    void retranslate() override { ui->retranslateUi(this); }
     void updateFlags() const;
     StartOpenResult openGrid(Grid* start);
 

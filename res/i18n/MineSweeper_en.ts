@@ -67,7 +67,7 @@
     </message>
     <message>
         <location filename="../../src/field.cpp" line="156"/>
-        <location filename="../../src/field.cpp" line="174"/>
+        <location filename="../../src/field.cpp" line="184"/>
         <source>Game Over</source>
         <translation>Game Over</translation>
     </message>
@@ -77,7 +77,7 @@
         <translation>You Lost</translation>
     </message>
     <message>
-        <location filename="../../src/field.cpp" line="174"/>
+        <location filename="../../src/field.cpp" line="184"/>
         <source>You Won</source>
         <translation>You Won</translation>
     </message>
@@ -101,47 +101,47 @@
 <context>
     <name>Grid</name>
     <message>
-        <location filename="../../src/grid.cpp" line="156"/>
+        <location filename="../../src/grid.cpp" line="159"/>
         <source>open result</source>
         <translation>open result</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="162"/>
+        <location filename="../../src/grid.cpp" line="165"/>
         <source>Game Over</source>
         <translation>Game Over</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="162"/>
+        <location filename="../../src/grid.cpp" line="165"/>
         <source>Game already ended</source>
         <translation>Game already ended</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="165"/>
+        <location filename="../../src/grid.cpp" line="168"/>
         <source>Unable to open</source>
         <translation>Unable to open</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="165"/>
+        <location filename="../../src/grid.cpp" line="168"/>
         <source>Cannot open flagged grid</source>
         <translation>Cannot open flagged grid</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="169"/>
+        <location filename="../../src/grid.cpp" line="172"/>
         <source>Need %1 more flags</source>
         <translation>Need %1 more flags</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="170"/>
+        <location filename="../../src/grid.cpp" line="173"/>
         <source>Not enough flags</source>
         <translation>Not enough flags</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="175"/>
+        <location filename="../../src/grid.cpp" line="178"/>
         <source>Too many flags by %1</source>
         <translation>Too many flags by %1</translation>
     </message>
     <message>
-        <location filename="../../src/grid.cpp" line="176"/>
+        <location filename="../../src/grid.cpp" line="179"/>
         <source>Too many flags</source>
         <translation>Too many flags</translation>
     </message>
@@ -166,7 +166,7 @@
         <location filename="../../include/mainwindow.ui" line="61"/>
         <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="174"/>
         <location filename="../../include/ui_mainwindow.h" line="174"/>
-        <location filename="../../src/mainwindow.cpp" line="115"/>
+        <location filename="../../src/mainwindow.cpp" line="114"/>
         <source>EASY</source>
         <translation>EASY</translation>
     </message>
@@ -174,7 +174,7 @@
         <location filename="../../include/mainwindow.ui" line="73"/>
         <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="175"/>
         <location filename="../../include/ui_mainwindow.h" line="175"/>
-        <location filename="../../src/mainwindow.cpp" line="117"/>
+        <location filename="../../src/mainwindow.cpp" line="116"/>
         <source>MEDIUM</source>
         <translation>MEDIUM</translation>
     </message>
@@ -182,7 +182,7 @@
         <location filename="../../include/mainwindow.ui" line="89"/>
         <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="176"/>
         <location filename="../../include/ui_mainwindow.h" line="176"/>
-        <location filename="../../src/mainwindow.cpp" line="119"/>
+        <location filename="../../src/mainwindow.cpp" line="118"/>
         <source>HARD</source>
         <translation>HARD</translation>
     </message>
@@ -190,7 +190,7 @@
         <location filename="../../include/mainwindow.ui" line="101"/>
         <location filename="../../build/MineSweeper_autogen/include/ui_mainwindow.h" line="177"/>
         <location filename="../../include/ui_mainwindow.h" line="177"/>
-        <location filename="../../src/mainwindow.cpp" line="122"/>
+        <location filename="../../src/mainwindow.cpp" line="121"/>
         <source>CUSTOM</source>
         <translation>CUSTOM</translation>
     </message>
@@ -255,17 +255,17 @@
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="../../src/locale.cpp" line="61"/>
+        <location filename="../../src/locale.cpp" line="64"/>
         <source>invalid language</source>
         <translation>invalid language</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="60"/>
+        <location filename="../../src/mainwindow.cpp" line="63"/>
         <source>invalid option</source>
         <translation>invalid option</translation>
     </message>
     <message>
-        <location filename="../../src/mainwindow.cpp" line="61"/>
+        <location filename="../../src/mainwindow.cpp" line="64"/>
         <source>You must start a game first</source>
         <translation>You must start a game first</translation>
     </message>
@@ -277,9 +277,134 @@
     <message>
         <location filename="../../src/mainwindow.cpp" line="148"/>
         <source>Do you wish to abort and start a new one? </source>
-        <translation >
+        <translation>
             Do you wish to abort and start a new one?
         </translation>
+    </message>
+</context>
+<context>
+    <name>RecordView</name>
+    <message>
+        <location filename="../../include/record.ui" line="14"/>
+        <location filename="../../include/record.ui" line="26"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="132"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="133"/>
+        <location filename="../../include/ui_record.h" line="132"/>
+        <location filename="../../include/ui_record.h" line="133"/>
+        <source>Game Records</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="38"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="134"/>
+        <location filename="../../include/ui_record.h" line="134"/>
+        <source>Game Mode:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="46"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="135"/>
+        <location filename="../../include/ui_record.h" line="135"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="51"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="136"/>
+        <location filename="../../include/ui_record.h" line="136"/>
+        <location filename="../../src/recordview.cpp" line="140"/>
+        <source>Easy</source>
+        <translation type="unfinished">Easy</translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="56"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="137"/>
+        <location filename="../../include/ui_record.h" line="137"/>
+        <location filename="../../src/recordview.cpp" line="142"/>
+        <source>Medium</source>
+        <translation type="unfinished">Medium</translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="61"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="138"/>
+        <location filename="../../include/ui_record.h" line="138"/>
+        <location filename="../../src/recordview.cpp" line="144"/>
+        <source>Hard</source>
+        <translation type="unfinished">Hard</translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="66"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="139"/>
+        <location filename="../../include/ui_record.h" line="139"/>
+        <location filename="../../src/recordview.cpp" line="146"/>
+        <source>Custom</source>
+        <translation type="unfinished">Custom</translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="87"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="141"/>
+        <location filename="../../include/ui_record.h" line="141"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="109"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="143"/>
+        <location filename="../../include/ui_record.h" line="143"/>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="114"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="145"/>
+        <location filename="../../include/ui_record.h" line="145"/>
+        <source>Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="119"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="147"/>
+        <location filename="../../include/ui_record.h" line="147"/>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="124"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="149"/>
+        <location filename="../../include/ui_record.h" line="149"/>
+        <source>Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="129"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="151"/>
+        <location filename="../../include/ui_record.h" line="151"/>
+        <source>Time (s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="134"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="153"/>
+        <location filename="../../include/ui_record.h" line="153"/>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../include/record.ui" line="157"/>
+        <location filename="../../build/MineSweeper_autogen/include/ui_record.h" line="154"/>
+        <location filename="../../include/ui_record.h" line="154"/>
+        <source>Back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/recordview.cpp" line="128"/>
+        <source>N/A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/recordview.cpp" line="148"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
