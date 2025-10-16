@@ -72,7 +72,7 @@ if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
     # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
-#    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+    #    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
     qt_add_translations(MineSweeper
             TS_FILES ${TS_FILES}
             ${CMAKE_CURRENT_BINARY_DIR}/res/i18n
@@ -150,3 +150,38 @@ install(TARGETS MineSweeper
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(MineSweeper)
 endif ()
+set(DIST_DIR "${CMAKE_BINARY_DIR}/dist")
+file(MAKE_DIRECTORY ${DIST_DIR})
+
+if(WIN32)
+    # 查找 windeployqt
+    find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt HINTS $ENV{Qt6_DIR}/../bin)
+    if(NOT WINDEPLOYQT_EXECUTABLE)
+        message(FATAL_ERROR "windeployqt.exe not found!")
+    endif()
+
+    add_custom_command(TARGET MineSweeper POST_BUILD
+            # 拷贝 exe
+            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:MineSweeper>" "${DIST_DIR}/MineSweeper.exe"
+            # 拷贝 DLL 和插件
+            COMMAND "${WINDEPLOYQT_EXECUTABLE}" "--dir" "${DIST_DIR}" "${DIST_DIR}/MineSweeper.exe"
+            COMMENT "Deploying MineSweeper and Qt DLLs to dist folder"
+    )
+
+elseif(UNIX AND NOT APPLE)
+    # Linux 下
+    add_custom_command(TARGET MineSweeper POST_BUILD
+            # 拷贝可执行文件到 dist
+            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:MineSweeper>" "${DIST_DIR}/MineSweeper"
+            # 可选：拷贝 Qt 库（如果用系统 Qt 可以跳过）
+            COMMENT "Deploying MineSweeper to dist folder on Linux"
+    )
+endif()
+
+# 打包成 zip（Windows 和 Linux 都可以）
+add_custom_target(package
+        COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_BINARY_DIR}/MineSweeper.zip" --format=zip "${DIST_DIR}"
+        DEPENDS MineSweeper
+        COMMENT "Packaging dist folder into MineSweeper.zip"
+)
+
