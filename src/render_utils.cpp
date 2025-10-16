@@ -23,8 +23,7 @@ QString joinRendererPath(const std::string& resourcePrefix, const std::string& f
     QString path = QString::fromStdString(resourcePrefix + fileName);
     if (!QFile::exists(path))
     {
-        qDebug() << "Icon not found: " << path;
-        return QString::fromStdString(resourcePrefix + "maybe.svg");
+        qFatal() << "Icon not found: " << path;
     }
     return path;
     // return QFile::exists(path) ? path : QString::fromStdString(resourcePrefix + "maybe.svg");
@@ -107,9 +106,7 @@ void MainWindow::renderIcon(Grid::State state, const int surroundingMines, QPush
         return;
     }
 
-    // 创建一个临时的unique_ptr用于传递给applyRenderer
-    auto tempRenderer = std::make_unique<QSvgRenderer>(renderer);
-    applyRenderer(tempRenderer, button);
+    applyRenderer(renderer, button);
 }
 
 QIcon MainWindow::loadSvg(const QString& path)

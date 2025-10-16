@@ -87,7 +87,7 @@ private:
     // 记录视图
     RecordView* recordView;
 
-    static void applyRenderer(const std::unique_ptr<QSvgRenderer>& renderer, QPushButton* button);
+    static void applyRenderer(QSvgRenderer* renderer, QPushButton* button);
     void hideAll() const;
 
 private slots:

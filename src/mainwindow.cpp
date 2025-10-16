@@ -214,22 +214,40 @@ void MainWindow::createLanguageMenu()
     }
 }
 
-void MainWindow::applyRenderer(const std::unique_ptr<QSvgRenderer>& renderer, QPushButton* button)
+void MainWindow::applyRenderer(QSvgRenderer* renderer, QPushButton* button)
 {
-    if (!button) return;
+
+    if (!button)
+    {
+        qFatal()<<"Button is nullptr";
+        return;
+    }
+    if (!renderer)
+    {
+        qFatal()<<"Renderer is nullptr";
+        return;
+    }
+    if (!renderer->isValid())
+    {
+        qFatal()<<"Renderer is invalid";
+    }
 
     QSize buttonSize = button->size();
     if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
     {
         buttonSize = QSize(32, 32); // Default size
     }
-    QPixmap pix(buttonSize*0.8);
+
+    QPixmap pix(buttonSize);
     pix.fill(Qt::transparent);
+
     QPainter painter(&pix);
-    renderer->render(&painter);
+    renderer->render(&painter, QRectF(0, 0, pix.width(), pix.height())); // 指定绘制区域
+
     button->setIcon(QIcon(pix));
     button->setIconSize(buttonSize);
 }
+
 
 void MainWindow::hideAll() const
 {
