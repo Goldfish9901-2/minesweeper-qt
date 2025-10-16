@@ -25,7 +25,7 @@ namespace Ui
 
 QT_END_NAMESPACE
 
-class MainWindow final : public QMainWindow,public Localeable
+class MainWindow final : public QMainWindow, public Localeable
 {
     Q_OBJECT
 
@@ -65,12 +65,12 @@ private:
     int offset;
 
     // SVG renderers stored as private const members
-    const std::unique_ptr<QSvgRenderer> blankIconRenderer;
-    const std::unique_ptr<QSvgRenderer> noAroundIconRenderer;
-    const std::unique_ptr<QSvgRenderer> flagIconRenderer;
-    const std::unique_ptr<QSvgRenderer> mineIconRenderer;
-    const std::unique_ptr<QSvgRenderer> mineTriggeredIconRenderer;
-    const std::vector<std::unique_ptr<QSvgRenderer>> surroundingMineIconRenderers; // 1-8数字图标渲染器
+    std::unique_ptr<QSvgRenderer> blankIconRenderer;
+    std::unique_ptr<QSvgRenderer> noAroundIconRenderer;
+    std::unique_ptr<QSvgRenderer> flagIconRenderer;
+    std::unique_ptr<QSvgRenderer> mineIconRenderer;
+    std::unique_ptr<QSvgRenderer> mineTriggeredIconRenderer;
+    std::vector<std::unique_ptr<QSvgRenderer>> surroundingMineIconRenderers; // 1-8数字图标渲染器
 
     // 语言翻译器
     QTranslator* translator;
@@ -83,24 +83,18 @@ private:
     // 根据难度创建游戏
     void createGame(Field::GameMode difficulty);
     Field* field;
-    
+
     // 记录视图
     RecordView* recordView;
 
-    // Individual renderer methods - 修改为直接设置图标到按钮
-    void setBlankIcon(QPushButton* button) const;
-    void setNoAroundIcon(QPushButton* button) const;
-    void setFlagIcon(QPushButton* button) const;
-    void setMineIcon(QPushButton* button) const;
-    void setMineTriggeredIcon(QPushButton* button) const;
-    void setSurroundingMineIcon(int number, QPushButton* button) const;
+    static void applyRenderer(const std::unique_ptr<QSvgRenderer>& renderer, QPushButton* button);
     void hideAll() const;
 
 private slots:
     // 动态语言切换槽函数
     void onLanguageActionTriggered(const QString& language);
     void showRecordView();
-    void retranslate() override{ui->retranslateUi(this);}
+    void retranslate() override { ui->retranslateUi(this); }
 };
 
 #endif // MAINWINDOW_H

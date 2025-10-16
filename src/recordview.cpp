@@ -124,8 +124,9 @@ void RecordView::displayRecords()
         timeItem->setTextAlignment(Qt::AlignCenter);
         ui->recordTable->setItem(row, 4, timeItem);
 
-        // Placeholder for date (as our current database schema doesn't store date)
-        auto* dateItem = new QTableWidgetItem(tr("N/A"));
+        // Date
+        QString dateStr = record.timestamp.isValid() ? record.timestamp.toString("yyyy-MM-dd hh:mm:ss") : tr("N/A");
+        auto* dateItem = new QTableWidgetItem(dateStr);
         dateItem->setTextAlignment(Qt::AlignCenter);
         ui->recordTable->setItem(row, 5, dateItem);
     }

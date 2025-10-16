@@ -7,15 +7,14 @@
 #include <vector>
 #include <set>
 
-std::shared_ptr<MainWindow> mw;
+
 
 
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     qDebug() << " application started. loading translations...";
-    std::shared_ptr<MainWindow> mw;
-    mw = std::make_shared<MainWindow>(new MainWindow());
+    MainWindow mw;
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     // 遍历系统语言，尝试加载对应的翻译文件
@@ -25,7 +24,7 @@ int main(int argc, char* argv[])
         const QString localeName = QLocale(locale).name();
 
 
-        if (mw->tryRegisterTranslation(localeName))
+        if (mw.tryRegisterTranslation(localeName))
         {
             QApplication::installTranslator(&translator);
         }
@@ -33,6 +32,6 @@ int main(int argc, char* argv[])
     }
 
 
-    mw->show();
+    mw.show();
     return QApplication::exec();
 }

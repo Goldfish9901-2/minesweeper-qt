@@ -30,7 +30,7 @@ QString joinRendererPath(const std::string& resourcePrefix, const std::string& f
     // return QFile::exists(path) ? path : QString::fromStdString(resourcePrefix + "maybe.svg");
 }
 
-// Lambda ³õÊ¼»¯º¯Êý
+// Lambda ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 std::unique_ptr<QSvgRenderer> loadRenderer(const std::string& resourcePrefix, const std::string& fileName)
 {
     return std::make_unique<QSvgRenderer>(joinRendererPath(resourcePrefix, fileName));
@@ -47,7 +47,7 @@ std::vector<std::unique_ptr<QSvgRenderer>> loadNumberRenderers(const std::string
     return renderers;
 }
 
-void MainWindow::renderIcon(Grid::State state, int surroundingMines, QPushButton* button) const
+void MainWindow::renderIcon(const Grid::State state, const int surroundingMines, QPushButton* button) const
 {
     QSize buttonSize = button->size();
     if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
@@ -107,12 +107,9 @@ void MainWindow::renderIcon(Grid::State state, const int surroundingMines, QPush
         return;
     }
 
-    QPixmap pix(size);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    renderer->render(&painter);
-    button->setIcon(QIcon(pix));
-    button->setIconSize(size);
+    // åˆ›å»ºä¸€ä¸ªä¸´æ—¶çš„unique_ptrç”¨äºŽä¼ é€’ç»™applyRenderer
+    auto tempRenderer = std::make_unique<QSvgRenderer>(renderer);
+    applyRenderer(tempRenderer, button);
 }
 
 QIcon MainWindow::loadSvg(const QString& path)
@@ -129,7 +126,7 @@ QIcon MainWindow::loadSvg(const QString& path)
 
 void MainWindow::initAutoAdjust()
 {
-    // ÉèÖÃ´°¿Ú×ÔÊÊÓ¦ÆÁÄ»´óÐ¡
+    // ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ä»ï¿½ï¿½Ð¡
     const QScreen* screen = QGuiApplication::primaryScreen();
     const QRect screenGeometry = screen->geometry();
     const int screenWidth = screenGeometry.width();

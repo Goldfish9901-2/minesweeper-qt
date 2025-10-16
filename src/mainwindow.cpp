@@ -106,7 +106,7 @@ void MainWindow::custom()
 }
 
 
-QString MainWindow::difficultyToStringStandard(Difficulty difficulty)
+QString MainWindow::difficultyToStringStandard(const Difficulty difficulty)
 {
     switch (difficulty)
     {
@@ -214,8 +214,7 @@ void MainWindow::createLanguageMenu()
     }
 }
 
-// Individual renderer methods
-void MainWindow::setBlankIcon(QPushButton* button) const
+void MainWindow::applyRenderer(const std::unique_ptr<QSvgRenderer>& renderer, QPushButton* button)
 {
     if (!button) return;
 
@@ -224,101 +223,10 @@ void MainWindow::setBlankIcon(QPushButton* button) const
     {
         buttonSize = QSize(32, 32); // Default size
     }
-
-    QPixmap pix(buttonSize);
+    QPixmap pix(buttonSize*0.8);
     pix.fill(Qt::transparent);
     QPainter painter(&pix);
-    blankIconRenderer->render(&painter);
-    button->setIcon(QIcon(pix));
-    button->setIconSize(buttonSize);
-}
-
-void MainWindow::setNoAroundIcon(QPushButton* button) const
-{
-    if (!button) return;
-
-    QSize buttonSize = button->size();
-    if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
-    {
-        buttonSize = QSize(32, 32); // Default size
-    }
-
-    QPixmap pix(buttonSize);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    noAroundIconRenderer->render(&painter);
-    button->setIcon(QIcon(pix));
-    button->setIconSize(buttonSize);
-}
-
-void MainWindow::setFlagIcon(QPushButton* button) const
-{
-    if (!button) return;
-
-    QSize buttonSize = button->size();
-    if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
-    {
-        buttonSize = QSize(32, 32); // Default size
-    }
-
-    QPixmap pix(buttonSize);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    flagIconRenderer->render(&painter);
-    button->setIcon(QIcon(pix));
-    button->setIconSize(buttonSize);
-}
-
-void MainWindow::setMineIcon(QPushButton* button) const
-{
-    if (!button) return;
-
-    QSize buttonSize = button->size();
-    if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
-    {
-        buttonSize = QSize(32, 32); // Default size
-    }
-
-    QPixmap pix(buttonSize);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    mineIconRenderer->render(&painter);
-    button->setIcon(QIcon(pix));
-    button->setIconSize(buttonSize);
-}
-
-void MainWindow::setMineTriggeredIcon(QPushButton* button) const
-{
-    if (!button) return;
-
-    QSize buttonSize = button->size();
-    if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
-    {
-        buttonSize = QSize(32, 32); // Default size
-    }
-
-    QPixmap pix(buttonSize);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    mineTriggeredIconRenderer->render(&painter);
-    button->setIcon(QIcon(pix));
-    button->setIconSize(buttonSize);
-}
-
-void MainWindow::setSurroundingMineIcon(int number, QPushButton* button) const
-{
-    if (!button || number < 1 || number > 8) return;
-
-    QSize buttonSize = button->size();
-    if (buttonSize.width() <= 0 || buttonSize.height() <= 0)
-    {
-        buttonSize = QSize(32, 32); // Default size
-    }
-
-    QPixmap pix(buttonSize);
-    pix.fill(Qt::transparent);
-    QPainter painter(&pix);
-    surroundingMineIconRenderers[number - 1]->render(&painter);
+    renderer->render(&painter);
     button->setIcon(QIcon(pix));
     button->setIconSize(buttonSize);
 }

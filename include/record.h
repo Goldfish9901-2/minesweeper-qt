@@ -5,20 +5,38 @@
 #ifndef MINESWEEPER_RECORD_H
 #define MINESWEEPER_RECORD_H
 #include "field.h"
+#include <QDateTime>
+
 class Field;
 
 class Record
 {
 public:
-     const Field::GameMode mode;
-     const unsigned short width, height, mines;
-     const unsigned _int32 secs;
+     Field::GameMode mode;
+     unsigned short width, height, mines;
+     unsigned _int32 secs;
+     QDateTime timestamp;
+
+     Record() : mode(Field::GameMode::EASY), width(0), height(0), mines(0), secs(0), timestamp(QDateTime::currentDateTime())
+     {
+     }
+
+     Record(const Field::GameMode mode,
+         const unsigned short width,
+         const unsigned short height,
+         const unsigned short mines,
+         const unsigned _int32 secs,
+         const QDateTime& timestamp)
+         : mode(mode), width(width), height(height), mines(mines), secs(secs), timestamp(timestamp)
+     {
+     }
+     
      Record(const Field::GameMode mode,
          const unsigned short width,
          const unsigned short height,
          const unsigned short mines,
          const unsigned _int32 secs)
-         : mode(mode), width(width), height(height), mines(mines), secs(secs)
+         : mode(mode), width(width), height(height), mines(mines), secs(secs), timestamp(QDateTime::currentDateTime())
      {
      }
 };
