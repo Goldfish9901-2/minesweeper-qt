@@ -14,7 +14,7 @@ class Record
 public:
      Field::GameMode mode;
      unsigned short width, height, mines;
-     unsigned _int32 secs;
+     unsigned int secs;
      QDateTime timestamp;
 
      Record() : mode(Field::GameMode::EASY), width(0), height(0), mines(0), secs(0), timestamp(QDateTime::currentDateTime())
@@ -25,7 +25,7 @@ public:
          const unsigned short width,
          const unsigned short height,
          const unsigned short mines,
-         const unsigned _int32 secs,
+         const unsigned int secs,
          const QDateTime& timestamp)
          : mode(mode), width(width), height(height), mines(mines), secs(secs), timestamp(timestamp)
      {
@@ -35,7 +35,7 @@ public:
          const unsigned short width,
          const unsigned short height,
          const unsigned short mines,
-         const unsigned _int32 secs)
+         const unsigned int secs)
          : mode(mode), width(width), height(height), mines(mines), secs(secs), timestamp(QDateTime::currentDateTime())
      {
      }
