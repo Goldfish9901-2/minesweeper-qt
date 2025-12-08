@@ -22,7 +22,11 @@ public:
 private:
     QSqlDatabase db;
     QString dbPath;
+
+private:
     bool createTables() const;
+    void syncIfWasm() const;
+
 };
 
 #endif //MINESWEEPER_DATABASE_H

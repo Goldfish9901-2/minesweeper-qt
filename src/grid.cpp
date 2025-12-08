@@ -1,7 +1,7 @@
 #include "grid.h"
 #include "field.h"
 #include "mainwindow.h"
-#include <QMessageBox>
+#include "toast.h"
 #include <QPainter>
 #include <QResizeEvent>
 #include <QGestureEvent>
@@ -59,14 +59,15 @@ Grid::Grid(const int row, const int col, Field *parent)
     setFont(QFont("Arial", 20, QFont::Bold));
     _longPressTimer->setInterval(400); // 长按 0.6s 触发
     _longPressTimer->setSingleShot(true);
-
+#ifdef ANDROID
     connect(_longPressTimer, &QTimer::timeout, this, [this]() {
         // 触发长按 -> 相当于右键
-        this->_pressing=true;
+        this->_pressing=false;
         this->onLongPress();
         this->vibrate(100);
-        this->_pressing=false;
+
     });
+#endif
     updateDisplay();
     grabGesture(Qt::TapAndHoldGesture);
 
@@ -117,21 +118,27 @@ bool Grid::isFlagged() const { return flagged; }
 
 void Grid::mousePressEvent(QMouseEvent *event)
 {
+#ifdef ANDROID
     if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton)
     {
-        _pressing = false;
+        _pressing = true;
         _longPressTimer->start(600);  // 600ms触发长按
         event->accept();
     }
+#else
+    onTap(event);
+#endif
 }
-
+#ifdef ANDROID
 void Grid::mouseReleaseEvent(QMouseEvent *event)
 {
-    _longPressTimer->stop();  // 松手就停止定时器
-    if (!_pressing)
-        onTap(event);        // 没触发长按就执行短按逻辑
-}
 
+    _longPressTimer->stop();  // 松手就停止定时器
+    if (_pressing)
+        onTap(event);        // 没触发长按就执行短按逻辑
+
+}
+#endif
 void Grid::onTap(QMouseEvent *event) {
     if (event->button() == Qt::RightButton) {
         this->flag();
@@ -144,22 +151,20 @@ void Grid::onTap(QMouseEvent *event) {
         // 根据返回结果显示相应的消息
         switch (result) {
         case StartOpenResult::GAME_ALREADY_ENDED:
-            QMessageBox::information(parent, tr("Game Over"),
-                                     tr("Game already ended"));
+            Toast::display(tr("Game already ended"), parent);
             break;
         case StartOpenResult::FLAGGED_GRID:
-            QMessageBox::information(parent, tr("Unable to open"),
-                                     tr("Cannot open flagged grid"));
+            Toast::display(tr("Cannot open flagged grid"), parent);
             break;
         case StartOpenResult::NOT_ENOUGH_FLAGS: {
             const QString message =
                 tr("Need %1 more flags").arg(surroundingMines - countFlag());
-            QMessageBox::information(parent, tr("Not enough flags"), message);
+            Toast::display(message, parent);
         } break;
         case StartOpenResult::TOO_MANY_FLAGS: {
             const QString message =
                 tr("Too many flags by %1").arg(countFlag() - surroundingMines);
-            QMessageBox::information(parent, tr("Too many flags"), message);
+            Toast::display(message, parent);
         } break;
         case StartOpenResult::SUCCESS:
         default:

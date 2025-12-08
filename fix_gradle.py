@@ -3,7 +3,7 @@ import os
 def main(
         wrapper:str = r'build/Android_Qt_6_8_5_Clang_arm64_v8a-Debug/android-build-MineSweeper/gradle/wrapper/gradle-wrapper.properties',
         key:str="distributionUrl",
-        value:str=r'https://mirrors.tuna.tsinghua.edu.cn/gradle/gradle-8.10-all.zip'
+        value:str=r'https://mirrors.cloud.tencent.com/gradle/gradle-8.10-all.zip'
 ):
     if not os.path.exists(wrapper):
         print(f"{wrapper} not exists.")

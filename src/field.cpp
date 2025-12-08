@@ -1,7 +1,7 @@
 #include "field.h"
 #include "grid.h"
 #include "mainwindow.h"
-#include <QMessageBox>
+#include "toast.h"
 #include <QTimer>
 #include <random>
 #include <queue>
@@ -142,10 +142,11 @@ bool Field::lose(const Grid* grid)
 {
     if (!started || !timer->isActive())
         return false;
-    // 如果是雷，游戏结束
+
     if (!grid->isMine())
         return false;
 
+    // 是雷，游戏结束
     timer->stop();
     //delete timer;
     for (const auto& t : this->grids)
@@ -153,7 +154,7 @@ bool Field::lose(const Grid* grid)
         t->reveal();
     }
     if (started)
-        QMessageBox::information(this, tr("Game Over"), tr("You Lost"));
+        Toast::display(tr("You Lost"), this);
     mainWindow->returnToMainMenu();
     // delete this;
     return true;
@@ -181,7 +182,7 @@ void Field::win()
         qDebug() << "Failed to initialize database";
     }
     
-    QMessageBox::information(this, tr("Game Over"), tr("You Won"));
+    Toast::display(tr("You Won"), this);
     // delete this;
     mainWindow->returnToMainMenu();
 }

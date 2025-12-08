@@ -5,12 +5,13 @@
 #include <QPushButton>
 #include <QRandomGenerator>
 #include <QSvgRenderer>
-
+#ifdef ANDROID
 #include <android/log.h>
+#endif
+#include "haptic.h"
 #include <qevent.h>
-#include"haptic.h"
 class Field;
-class Grid final : public QPushButton,public Haptic {
+class Grid final : public QPushButton, public Haptic {
     Q_OBJECT
 
 public:
@@ -93,12 +94,14 @@ private:
 
 private slots:
     void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent*event)override;
+#ifdef ANDROID
+    void mouseReleaseEvent(QMouseEvent *event) override;
+#endif
     void resizeEvent(QResizeEvent *event) override;
 
 protected:
     // bool event(QEvent *event) override;
-    void onTap(QMouseEvent* event);
+    void onTap(QMouseEvent *event);
     void onLongPress();
 };
 
@@ -114,6 +117,5 @@ __android_log_print(ANDROID_LOG_INFO, LOG_TAG,                               \
 __android_log_print(ANDROID_LOG_INFO, LOG_TAG,                               \
                     __VA_ARGS__) // Info-level macro
 #endif
-
 
 #endif // GRID_H

@@ -1,7 +1,7 @@
 //
 // Created by jerry on 2025/10/14.
 //
-#include <QMessageBox>
+#include "toast.h"
 #include <ui_mainwindow.h>
 
 #include "mainwindow.h"
@@ -59,9 +59,5 @@ void MainWindow::onLanguageActionTriggered(const QString& language)
             recordView->retranslate();
         return;
     }
-    QMessageBox::warning(
-        nullptr,
-        tr("invalid language"),
-        language);
+    Toast::display(tr("invalid language") + ": " + language);
 }
-

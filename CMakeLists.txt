@@ -1,246 +1,110 @@
 cmake_minimum_required(VERSION 3.15)
-
 project(MineSweeper VERSION 1.0 LANGUAGES CXX)
 
+# ---------------- Qt 自动功能 ----------------
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Svg SvgWidgets)
-
-
-set(QT_VERSION_MAJOR 6)
-
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Sql)
+# ---------------- Qt6 查找 ----------------
+find_package(Qt6 REQUIRED COMPONENTS
+        Core Gui Widgets Sql Svg SvgWidgets Qml QuickControls2 LinguistTools
+)
 
 qt_standard_project_setup(
         I18N_TRANSLATED_LANGUAGES zh_CN en_US
 )
 
+# ---------------- Translation 文件 ----------------
 set(TS_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/res/i18n/MineSweeper_zh_CN.ts
         ${CMAKE_CURRENT_SOURCE_DIR}/res/i18n/MineSweeper_en.ts
 )
+qt_add_translations(MineSweeper
+        TS_FILES ${TS_FILES}
+        ${CMAKE_CURRENT_BINARY_DIR}/res/i18n
+        RESOURCE_PREFIX /i18n
+)
+
+# ---------------- 源文件列表 ----------------
+set(SOURCES
+        src/main.cpp
+        src/mainwindow.cpp include/mainwindow.h include/mainwindow.ui
+        src/field.cpp include/field.h include/field.ui
+        src/grid.cpp include/grid.h
+        src/locale.cpp src/render_utils.cpp src/icon_tests.cpp
+        src/LanguageChoiceAction.cpp include/LanguageChoiceAction.h
+        src/database.cpp include/database.h include/record.h
+        src/recordview.cpp include/recordview.h include/record.ui
+        src/Localeable.cpp include/Localeable.h
+        src/haptic.cpp include/haptic.h
+        src/toast.cpp include/toast.h
+        ms.qrc
+        ${TS_FILES}
+)
 set(CMAKE_AUTOUIC_SEARCH_PATHS
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-
-set(PROJECT_SOURCES
-        src/main.cpp
-
-        src/mainwindow.cpp
-        include/mainwindow.h
-        include/mainwindow.ui
-
-        include/field.ui
-        include/field.h
-        src/field.cpp
-
-        include/grid.h
-        src/grid.cpp
-
-        ms.qrc
-
-        ${TS_FILES}
-        src/locale.cpp
-        src/render_utils.cpp
-        src/icon_tests.cpp
-
-        include/LanguageChoiceAction.h
-        src/LanguageChoiceAction.cpp
-        include/record.h
-        include/database.h
-        src/database.cpp
-        include/recordview.h
-        src/recordview.cpp
-        include/record.ui
-        src/Localeable.cpp
-        include/Localeable.h
-
-        include/haptic.h
-        src/haptic.cpp
+# ---------------- 可执行文件 ----------------
+qt6_add_executable(MineSweeper
+        ${SOURCES}
 )
 
-#define the target to produce
-if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(MineSweeper
-            MANUAL_FINALIZATION
-            ${PROJECT_SOURCES}
-
-    )
-    # if(ANDROID)
-    #     set_target_properties(MineSweeper PROPERTIES
-    #         ANDROID_PACKAGE_LIB_NAME "lib_arm64-v8a"
-    #     )
-    # endif()
-
-
-    if(ANDROID)
-        message(STATUS "Building for Android")
-
-
-        # # 指定源目录（必须，第一行设置）
-        # set_property(TARGET MineSweeper APPEND PROPERTY
-        #     QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
-        # )
-        #     set_target_properties(MineSweeper PROPERTIES ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-
-
-        # 权限注入（用函数，如果报错换属性）
-        # qt_add_android_permission(MineSweeper
-        #     NAME android.permission.VIBRATE
-        # )
-        # 或 fallback：
-        set_property(TARGET MineSweeper APPEND PROPERTY QT_ANDROID_EXTRA_PERMISSIONS android.permission.VIBRATE)
-    endif()
-
-
-        # qt_add_android_permission(MineSweeper
-        #     NAME android.permission.VIBRATE
-        # )
-
-    # Define target properties for Android with Qt 6 as:
-    #    set_property(TARGET MineSweeper APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-    #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-    # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-
-    #    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-    qt_add_translations(MineSweeper
-            TS_FILES ${TS_FILES}
-            ${CMAKE_CURRENT_BINARY_DIR}/res/i18n
-            RESOURCE_PREFIX /i18n
-    )
-
-    #    # 添加生成的.qm文件到资源文件
-    set_source_files_properties(ms.qrc PROPERTIES QT_RESOURCE_ALIAS_PATH "/i18n")
-    set_source_files_properties(${qmFiles} PROPERTIES
-            QT_RESOURCE_ALIAS_PATH "/i18n")
-
-else () # qt5
-    if (ANDROID)
-        add_library(MineSweeper SHARED
-                ${PROJECT_SOURCES}
-                ${QM_FILES}
-        )
-        # Define properties for Android with Qt 5 after find_package() calls as:
-        #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-
-    else ()
-        add_executable(MineSweeper
-                ${PROJECT_SOURCES}
-                ${QM_FILES}
-        )
-    endif ()
-
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
-endif ()
-if (WIN32)
-    target_sources(MineSweeper PRIVATE res/appicon.rc)
-endif ()
-if (MSVC)
-    add_compile_options("/utf-8")
-endif ()
-
-
-
-set_target_properties(MineSweeper PROPERTIES
-        WIN32_EXECUTABLE TRUE
-        MACOSX_BUNDLE TRUE
-)
-set_target_properties(MineSweeper PROPERTIES
-    QT_ANDROID_PACKAGE_NAME "org.goldfish.qt.minesweeper"
+target_link_libraries(MineSweeper PRIVATE
+        Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Sql Qt6::Svg Qt6::SvgWidgets Qt6::Qml Qt6::QuickControls2
 )
 
 target_include_directories(MineSweeper PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(MineSweeper
-        PRIVATE
-        Qt${QT_VERSION_MAJOR}::Core
-        Qt${QT_VERSION_MAJOR}::Gui
-
-        Qt${QT_VERSION_MAJOR}::Widgets
-        Qt${QT_VERSION_MAJOR}::Svg
-        Qt${QT_VERSION_MAJOR}::SvgWidgets
-        Qt${QT_VERSION_MAJOR}::Sql
-)
-
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if (${QT_VERSION} VERSION_LESS 6.1.0)
-    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.MineSweeper)
-endif ()
-set_target_properties(MineSweeper PROPERTIES
-        ${BUNDLE_ID_OPTION}
-        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-        MACOSX_BUNDLE TRUE
-        WIN32_EXECUTABLE TRUE
-)
-if(ANDROID)
-    target_compile_definitions(MineSweeper PRIVATE Q_OS_ANDROID)
-endif()
-if(IOS)
-    target_compile_definitions(MineSweeper PRIVATE Q_OS_IOS)
-endif()
-
-include(GNUInstallDirs)
-install(TARGETS MineSweeper
-        BUNDLE DESTINATION .
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-
-if (QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(MineSweeper)
-endif ()
-set(DIST_DIR "${CMAKE_BINARY_DIR}/dist")
-file(MAKE_DIRECTORY ${DIST_DIR})
-
+# ---------------- Windows DLL 自动部署 ----------------
 if(WIN32)
-    # 查找 windeployqt
+    set(DIST_DIR "${CMAKE_BINARY_DIR}/dist")
+    file(MAKE_DIRECTORY ${DIST_DIR})
+
     find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt HINTS $ENV{Qt6_DIR}/../bin)
     if(NOT WINDEPLOYQT_EXECUTABLE)
-        message(FATAL_ERROR "windeployqt.exe not found!")
+        message(FATAL_ERROR "windeployqt.exe not found! Set Qt6_DIR environment variable correctly.")
     endif()
 
     add_custom_command(TARGET MineSweeper POST_BUILD
-            # 拷贝 exe
             COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:MineSweeper>" "${DIST_DIR}/MineSweeper.exe"
-            # 拷贝 DLL 和插件
             COMMAND "${WINDEPLOYQT_EXECUTABLE}" "--dir" "${DIST_DIR}" "${DIST_DIR}/MineSweeper.exe"
             COMMENT "Deploying MineSweeper and Qt DLLs to dist folder"
     )
+endif()
 
-elseif(UNIX AND NOT APPLE)
-    # Linux 下
-    add_custom_command(TARGET MineSweeper POST_BUILD
-            # 拷贝可执行文件到 dist
-            COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:MineSweeper>" "${DIST_DIR}/MineSweeper"
-            # 可选：拷贝 Qt 库（如果用系统 Qt 可以跳过）
-            COMMENT "Deploying MineSweeper to dist folder on Linux"
+# ---------------- Linux 安装到 ~/.local ----------------
+if(UNIX AND NOT APPLE)
+    install(TARGETS MineSweeper
+            RUNTIME DESTINATION $ENV{HOME}/.local/bin
     )
 endif()
 
-# 打包成 zip（Windows 和 Linux 都可以）
+# ---------------- Windows / macOS 资源属性 ----------------
+if(WIN32)
+    set_target_properties(MineSweeper PROPERTIES WIN32_EXECUTABLE TRUE)
+elseif(APPLE)
+    set_target_properties(MineSweeper PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
+
+# ---------------- 打包为 zip ----------------
+set(DIST_DIR "${CMAKE_BINARY_DIR}/dist")
 add_custom_target(package
         COMMAND ${CMAKE_COMMAND} -E tar "cfv" "${CMAKE_BINARY_DIR}/MineSweeper.zip" --format=zip "${DIST_DIR}"
         DEPENDS MineSweeper
         COMMENT "Packaging dist folder into MineSweeper.zip"
 )
-if(ANDROID)
-    add_custom_command(TARGET MineSweeper POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "$<TARGET_FILE:MineSweeper>"
-            "${CMAKE_CURRENT_SOURCE_DIR}/android/libs/arm64-v8a/libMineSweeper.so"
-        COMMENT "Copying libMineSweeper.so to android/libs/arm64-v8a"
-    )
+
+# ---------------- Windows 资源文件 ----------------
+if(WIN32)
+    target_sources(MineSweeper PRIVATE res/appicon.rc)
 endif()
 
+# ---------------- MSVC 编码 ----------------
+if(MSVC)
+    add_compile_options("/utf-8")
+endif()

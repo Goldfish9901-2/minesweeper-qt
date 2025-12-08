@@ -6,19 +6,27 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QDebug>
+#ifdef Q_OS_WASM
+#include <emscripten.h>
+#endif
 
 DatabaseManager::DatabaseManager()
 {
-    // 设置数据库路径到用户数据目录
+    qDebug()<<"init sqlite..";
+#ifdef Q_OS_WASM
+    // 挂载 IDBFS
+    EM_ASM(
+        try { FS.mkdir('/data'); } catch(e) {}
+        FS.mount(IDBFS, {}, '/data');
+        );
+    dbPath = "/data/records.db";
+#else
     const QString dataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    qDebug() << QString(" opening sqlite at %1...").arg(dataPath);
-    const QDir dir;
+    QDir dir;
     if (!dir.exists(dataPath))
-    {
-       auto result= dir.mkpath(dataPath);
-    }
-
+        dir.mkpath(dataPath);
     dbPath = dataPath + "/records.db";
+#endif
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(dbPath);
 }
@@ -38,7 +46,18 @@ bool DatabaseManager::init()
         qDebug() << "Cannot open database:" << db.lastError().text();
         return false;
     }
-
+#ifdef Q_OS_WASM
+    // 调用 JS 同步 IndexedDB
+    EM_ASM({
+        FS.syncfs(function(err) {
+            if(err) {
+                console.error('DB sync failed', err);
+            } else {
+                console.log('DB synced to IndexedDB');
+            }
+        });
+    });
+#endif
     return createTables();
 }
 
@@ -141,4 +160,15 @@ QList<Record> DatabaseManager::getAllRecords() const
     }
 
     return records;
+}
+void DatabaseManager::syncIfWasm() const
+{
+#ifdef Q_OS_WASM
+    EM_ASM(
+        FS.syncfs(function(err){
+            if(err) console.log('DB sync failed', err);
+            else console.log('DB synced to IndexedDB');
+        });
+        );
+#endif
 }
